@@ -93,15 +93,15 @@ Quando a expressão não couber em uma linha, quebre-a com os seguintes princíp
 
 ```ruby
 class TestClass
-    # bad
-    def TestClass.some_method
-      # body omitted
-    end
+  # bad
+  def TestClass.some_method
+    # body omitted
+  end
 
-    # good
-    def self.some_other_method
-      # body omitted
-end
+  # good
+  def self.some_other_method
+    # body omitted
+  end
 ```
 ### 7.2 Declaração `case`
 
@@ -187,7 +187,7 @@ end
   do_something if some_condition
 ```
 
-## Nomenclatura
+## 8 Nomenclatura
 
 * Use ``` modo_correto ``` conhedido como `snake_case` para métodos e variáveis.
 * Use ``` ModoCorreto ``` conhecido como `CamelCase` para classes e módulos.
@@ -195,7 +195,7 @@ end
 * Métodos que retornam um valor booleano devem terminar com interrogação `?`
 *Métodos com algum risco devem terminar com exclamação `!`
 
-## Outras expressões
+## 9 Outras expressões
 
 * Prefira ```%w``` para a sintaxe de um array literal quando precisar de array de strings.
 
@@ -220,3 +220,5 @@ hash = { :one => 1, :two => 2, :three => 3 }
 Referências: 
 * [Ruby Style Sheet](https://github.com/bbatsov/ruby-style-guide) 
 * [Ruby Style Sheet Guide Git](https://github.com/styleguide/ruby)
+
+
