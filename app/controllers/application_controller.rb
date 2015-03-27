@@ -5,9 +5,10 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :list_speciality, :list_work_unit_name, :work_unit_link
 
-  	def current_user
-  		@current_user ||= User.find(session[:user_id]) if session[:user_id]
-  	end
+	# Verify if some user is logged on TEM-DF
+	def current_user
+		@current_user ||= User.find(session[:user_id]) if session[:user_id]
+	end
 
 	def index	
 	end
@@ -15,17 +16,20 @@ class ApplicationController < ActionController::Base
   private
 	def list_speciality
 		@medic= Medic.all
-		return get_by_speciality_or_work_unit(@medic)
+		get_by_speciality_or_work_unit(@medic)
 	end
 
+	# List all the work unit names
 	def list_work_unit_name
 		@work_unit = WorkUnit.all
-		return get_by_speciality_or_work_unit(@work_unit)
+		get_by_speciality_or_work_unit(@work_unit)
 	end
 
+	# REVIEW: the argument object1 and "it" must be renamed! 
+	# Gets the doctor wich is passed in argument through of his     # speciality or work unit.
 	def get_by_speciality_or_work_unit(object1)
-		@speciality = Array.new
-		@work_unit_name = Array.new
+		@speciality = []
+		@work_unit_name = []
 
 		medic = true
 
@@ -43,9 +47,9 @@ class ApplicationController < ActionController::Base
 		end
 
 		if medic
-			return @speciality
+			@speciality
+		else
+			@work_unit_name
 		end
-
-		return @work_unit_name
 	end
 end

@@ -1,4 +1,5 @@
 class PasswordResetsController < ApplicationController
+
 	def new
 	end
 
@@ -13,17 +14,18 @@ class PasswordResetsController < ApplicationController
 	end
 
 	def edit
-
 		@user = User.find_by_password_reset_token(params[:id])
 		
 		if !@user
 			redirect_to root_url, :notice => "A senha já foi alterada."
+		else
+			# Nothing to do	
 		end
 	end
 
 	def update
 		@user = User.find_by_password_reset_token!(params[:id])
-	
+
 		if @user.password_reset_sent_at < 2.hours.ago
 			redirect_to new_password_reset_path, :alert => "O link de redefinição de senha expirou."
 		else
@@ -37,5 +39,4 @@ class PasswordResetsController < ApplicationController
 			end			
 		end
 	end
-	
 end
