@@ -1,4 +1,4 @@
-require 'work_unit'
+require "work_unit"
 
 class Medic < ActiveRecord::Base
 	belongs_to :work_unit
@@ -26,3 +26,4 @@ class Medic < ActiveRecord::Base
 		end
 	end
 end
+
