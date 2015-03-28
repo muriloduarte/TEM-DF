@@ -1,6 +1,8 @@
 class MedicsController < ApplicationController
 
-	
+	NOT_EXIST_RATING = 0
+	NOT_EXIST_GRADE = "0"
+
 	helper_method :array_speciality, :array_medics_quantity
 
 	def results
@@ -19,12 +21,12 @@ class MedicsController < ApplicationController
 		@average = calculate_average(@medic)
 		@ratings = Rating.all.where(medic_id: @medic.id).size
 	end
-
-#graphs methods and actions
 	
+	# REVIEW: Can be renamed.
+	# Show the work units X  quantity medics by region.
 	def workunits_graph
-		@medics_size = Array.new
-		@unit_name = Array.new
+		@medics_size = []
+		@unit_name = []
 		@work_unit = WorkUnit.all
 
 		@work_unit.each do |work_unit|
@@ -36,23 +38,27 @@ class MedicsController < ApplicationController
 
 	def array_speciality (id_work_unit)
 		@medic = Medic.all.where(work_unit_id: id_work_unit)
-		@speciality = Array.new
+		@speciality = []
+		
 		@medic.each do |medic|
 			unless @speciality.include?(medic.speciality)
 				@speciality.push(medic.speciality)
 			end
 		end
-		return @speciality
+		
+		@speciality
 	end
 
 	def array_medics_quantity (id_work_unit, array_speciality)
 		@medic = Medic.all.where(work_unit_id: id_work_unit)
-		@medics_size_speciality = Array.new
+		@medics_size_speciality = []
+		
 		array_speciality.each do |speciality|
 			quantity = Medic.all.where(speciality: speciality, work_unit_id: id_work_unit).size
 			@medics_size_speciality.push(quantity)
 		end
-		return @medics_size_speciality
+		
+		@medics_size_speciality
 	end
 	
 	def rating
@@ -78,7 +84,7 @@ class MedicsController < ApplicationController
 		end
 	end
 
-  	def create_comment
+	def create_comment
 		@user = User.find_by_id(session[:remember_token])
 		@medic = Medic.find_by_id(params[:medic_id])
 
@@ -91,68 +97,66 @@ class MedicsController < ApplicationController
 		else
 			redirect_to login_path, :alert => "O Usuário necessita estar logado"
 		end
-  	end
+	end
 
+	def create_relevance		
+		@user = User.find_by_id(session[:remember_token])
+		@comment = Comment.find_by_id(params[:comment_id])
 
+	if @user == nil
+		redirect_to login_path, :alert => "O Usuário necessita estar logado"
+	elsif @comment
+			@relevance = Relevance.find_by_user_id_and_comment_id(@user.id, @comment.id)
 
-  	def create_relevance
-  		@user = User.find_by_id(session[:remember_token])
-  		@comment = Comment.find_by_id(params[:comment_id])
+			if @relevance
+				@relevance.update_attribute(:value, params[:value])
+			else
+				@relevance = Relevance.create(value: params[:value], user: @user, comment: @comment)
+			end
+		redirect_to action:"profile",id: params[:medic_id]
+		end
+	end
 
-		if @user == nil
-			redirect_to login_path, :alert => "O Usuário necessita estar logado"
-		elsif @comment
-  			@relevance = Relevance.find_by_user_id_and_comment_id(@user.id, @comment.id)
+	def to_report
+		@comment = Comment.find_by_id(params[:comment_id])
+		if @comment.report == false
+			@comment.update_attribute(:report, true)
+		end
+		flash[:notice] = "Comentário reportado."
+	
+		redirect_to action:"profile",id: params[:medic_id]
+	end
 
-  			if @relevance
-  				@relevance.update_attribute(:value, params[:value])
-  			else
-  				@relevance = Relevance.create(value: params[:value], user: @user, comment: @comment)
-  			end
-			redirect_to action:"profile",id: params[:medic_id]
-  		end
-  	end
+	def ranking
+		@medics = Medic.order(average: :desc).limit(10)
+	end
 
-  	def to_report
-  		@comment = Comment.find_by_id(params[:comment_id])
-  		if @comment.report == false
-  			@comment.update_attribute(:report, true)
-  		end
-  		flash[:notice] = "Comentário reportado."
-		
-  		redirect_to action:"profile",id: params[:medic_id]
-  	end
+  private 
+	def create_rating(user, medic)
+		@rating = Rating.new(grade: params[:grade], user: user, medic: medic, date: Time.new)
+		@rating.save
+	end
 
-  	def ranking
-  		@medics = Medic.order(average: :desc).limit(10)
-  	end
+	def update_rating(rating,grade)
+		if grade != NOT_EXIST_GRADE
+			rating.update_attribute(:grade , grade)
+      rating.update_attribute(:date , Time.new)
+    else
+    	# Nothing to do  
+    end
+	end
 
-  	private 
+	# REVIEW: What is sum / (1.0 * @ratings.size? Create a variable for this.   # Rename the variable r of each
+	def calculate_average(medic)
+		@ratings = Rating.all.where(medic_id: medic.id)
 
-  		def create_rating(user, medic)
-			@rating = Rating.new(grade: params[:grade], user: user, medic: medic, date: Time.new)
-			@rating.save
-	  	end
-
-	  	def update_rating(rating,grade)
-	  		if grade != "0"
-				rating.update_attribute(:grade , grade)
-            	rating.update_attribute(:date , Time.new)
-            end
-	  	end
-
-	  	def calculate_average(medic)
-	  		@ratings = Rating.all.where(medic_id: medic.id)
-
-	  		if @ratings.size == 0
-	  			return 0
-	  		else
-		  		sum = 0
-		  		@ratings.each do |r|
-		  			sum += r.grade
-	  		end
-	  			medic.update_attributes(:average => sum/(1.0*@ratings.size))
-				return sum/(1.0*@ratings.size)
-	  		end
-	  	end
+		if @ratings.size == NOT_EXIST_RATING
+			NOT_EXIST_RATING
+		else
+  		sum = 0
+			@ratings.each { |r| sum += r.grade}
+			medic.update_attributes(:average => sum / (1.0 * @ratings.size))
+			sum / (1.0 * @ratings.size)
+		end
+	end
 end
