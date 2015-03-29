@@ -6,7 +6,7 @@ class MedicsController < ApplicationController
 	helper_method :array_speciality, :array_medics_quantity
 
 	def results
-		@medics = Medic.search(params[:list_specility], params[:list_work_unit_name])
+		@medics = Medic.search(params[:list_specility], params[:list_work_unit_name																										 ])
 		if @medics
   			@medics
   		else
@@ -28,7 +28,6 @@ class MedicsController < ApplicationController
 		@medics_size = []
 		@unit_name = []
 		@work_unit = WorkUnit.all
-
 		@work_unit.each do |work_unit|
 			quantity = Medic.all.where(work_unit_id: work_unit.id).size
 			@medics_size.push(quantity)
@@ -39,7 +38,6 @@ class MedicsController < ApplicationController
 	def array_speciality (id_work_unit)
 		@medic = Medic.all.where(work_unit_id: id_work_unit)
 		@speciality = []
-		
 		@medic.each do |medic|
 			unless @speciality.include?(medic.speciality)
 				@speciality.push(medic.speciality)
@@ -52,12 +50,13 @@ class MedicsController < ApplicationController
 	def array_medics_quantity (id_work_unit, array_speciality)
 		@medic = Medic.all.where(work_unit_id: id_work_unit)
 		@medics_size_speciality = []
-		
 		array_speciality.each do |speciality|
-			quantity = Medic.all.where(speciality: speciality, work_unit_id: id_work_unit).size
+			quantity = Medic.all.where(speciality: speciality,
+																 work_unit_id: id_work_unit
+																)
+																.size
 			@medics_size_speciality.push(quantity)
 		end
-		
 		@medics_size_speciality
 	end
 	
@@ -65,7 +64,6 @@ class MedicsController < ApplicationController
 		medic_id = params[:medic_id]
 		@user = User.find_by_id(session[:remember_token])
 		@medic = Medic.find_by_id(medic_id)
-
 		if @user != nil
 			rating_status = ""
 			@rating = Rating.find_by_user_id_and_medic_id(@user.id, @medic.id)
@@ -85,11 +83,9 @@ class MedicsController < ApplicationController
 	def create_comment
 		@user = User.find_by_id(session[:remember_token])
 		@medic = Medic.find_by_id(params[:medic_id])
-
 		if @user
 			@comment = Comment.new(content: params[:content], date: Time.current,
 				medic: @medic, user: @user, comment_status: true, report: false)
-
 			@comment.save
 			redirect_to profile_path(@medic)
 		else
@@ -100,12 +96,10 @@ class MedicsController < ApplicationController
 	def create_relevance		
 		@user = User.find_by_id(session[:remember_token])
 		@comment = Comment.find_by_id(params[:comment_id])
-
 	if @user == nil
 		redirect_to login_path, :alert => "O Usuário necessita estar logado"
 	elsif @comment
 			@relevance = Relevance.find_by_user_id_and_comment_id(@user.id, @comment.id)
-
 			if @relevance
 				@relevance.update_attribute(:value, params[:value])
 			else
@@ -146,7 +140,6 @@ class MedicsController < ApplicationController
 	# REVIEW: What is sum / (1.0 * @ratings.size? Create a variable for this.   # Rename the variable r of each
 	def calculate_average(medic)
 		@ratings = Rating.all.where(medic_id: medic.id)
-
 		if @ratings.size == NOT_EXIST_RATING
 			NOT_EXIST_RATING
 		else

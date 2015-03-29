@@ -10,7 +10,6 @@ class Medic < ActiveRecord::Base
 	def self.search(speciality, work_unit)
 		if work_unit != "Informe a Região"
 			@work_unit_instance = WorkUnit.find_by_name(work_unit)
-
 			if(@work_unit_instance)
 				if speciality != "Informe a Especialidade"
 					where("speciality =  ? AND work_unit_id = ?", speciality,@work_unit_instance.id).all

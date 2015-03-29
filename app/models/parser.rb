@@ -24,13 +24,12 @@ class Parser < ActiveRecord::Base
 			end_date = DateTime.parse(row[6] + " " + row[8])
 			formatted_end_date = end_date.strftime("%a %b %d %H:%M")          	
 	    work_unit_record = WorkUnit.find_or_create_by(:name => row[0])
-	    params_medic_record = { 
-	    	:name => row[3], 
-	    	:average => 0,
-	    	:registry => row[2],
-	      :speciality => row[4],
-	      :department => row[1] 
-	    }
+	    params_medic_record = { :name => row[3], 
+	    												:average => 0,
+	    												:registry => row[2],
+	      											:speciality => row[4],
+	      											:department => row[1] 
+	    											}
 	    medic_record = work_unit_record.medics.find_or_create_by(params_medic_record
 	    	)
 	    medic_record.schedules.create(:in => formatted_start_date, 
