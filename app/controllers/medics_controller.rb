@@ -68,9 +68,7 @@ class MedicsController < ApplicationController
 
 		if @user != nil
 			rating_status = ""
-
 			@rating = Rating.find_by_user_id_and_medic_id(@user.id, @medic.id)
-
 			if @rating != nil
 				update_rating(@rating , params[:grade])
 				rating_status = 'Avaliação Alterada!'
@@ -89,7 +87,7 @@ class MedicsController < ApplicationController
 		@medic = Medic.find_by_id(params[:medic_id])
 
 		if @user
-			@comment = Comment.new(content: params[:content], date: Time.now,
+			@comment = Comment.new(content: params[:content], date: Time.current,
 				medic: @medic, user: @user, comment_status: true, report: false)
 
 			@comment.save
@@ -123,7 +121,6 @@ class MedicsController < ApplicationController
 			@comment.update_attribute(:report, true)
 		end
 		flash[:notice] = "Comentário reportado."
-	
 		redirect_to action:"profile",id: params[:medic_id]
 	end
 
@@ -133,14 +130,14 @@ class MedicsController < ApplicationController
 
   private 
 	def create_rating(user, medic)
-		@rating = Rating.new(grade: params[:grade], user: user, medic: medic, date: Time.new)
+		@rating = Rating.new(grade: params[:grade], user: user, medic: medic, date: Time.current)
 		@rating.save
 	end
 
 	def update_rating(rating,grade)
 		if grade != NOT_EXIST_GRADE
 			rating.update_attribute(:grade , grade)
-      rating.update_attribute(:date , Time.new)
+      rating.update_attribute(:date , Time.current)
     else
     	# Nothing to do  
     end
@@ -155,8 +152,9 @@ class MedicsController < ApplicationController
 		else
   		sum = 0
 			@ratings.each { |r| sum += r.grade}
-			medic.update_attributes(:average => sum / (1.0 * @ratings.size))
-			sum / (1.0 * @ratings.size)
+			arithmetic_mean_averange = sum / (1.0 * @ratings.size)
+			medic.update_attributes(:average => sum / arithmetic_mean_averange
+			arithmetic_mean_averange
 		end
 	end
 end

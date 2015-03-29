@@ -26,13 +26,11 @@ class ApplicationController < ActionController::Base
 	end
 
 	# REVIEW: the argument object1 and "it" must be renamed! 
-	# Gets the doctor wich is passed in argument through of his     # speciality or work unit.
+	# Gets the doctor wich is passed in argument through of his speciality or    # work unit.
 	def get_by_speciality_or_work_unit(object1)
 		@speciality = []
 		@work_unit_name = []
-
 		medic = true
-
 		object1.each do |it|
 			if it.kind_of?(Medic)
 				unless @speciality.include?(it.speciality)
@@ -45,7 +43,6 @@ class ApplicationController < ActionController::Base
 				medic = false
 			end
 		end
-
 		if medic
 			@speciality
 		else
