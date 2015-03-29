@@ -1,4 +1,4 @@
-**Integrantes:** Murilo Duarte, Karine Valença, Wesley Araújo e Vinícius Bandeira  
+**Integrantes:** Murilo Duarte, Karine Valença, Wesley Araujo e Vinícius Bandeira  
 **Curso:** Engenharia de Software  
 **Universidade:** Universidade de Brasília (UnB)  
 **Matéria:** Técnicas de Programação   
@@ -32,6 +32,28 @@ outra linha de comentário
 # linha de comentário
 # outra linha de comentário
 ```
+
+### 2.1 Comment annotations
+
+* Serve para atentar sobre alguma eventualidade do código, alertar para alteração, melhoria, insegurança de algum trecho de código. 
+* Comment annotation é usado imediatamente acima de um determinado código.
+* É escrito com caracteres em maiúsculo, `:`, um espaço e a descrição.
+* Se houver linhas múltiplas, a descrição do annotation deverá ter três espaços depois de `#`:
+
+``` ruby
+def bar
+  # FIXME: This has crashed occasionally since v3.2.1. It may
+  #   be related to the BarBazUtil upgrade.
+  baz(:quux)
+end
+```
+As annotations são listadas abaixo: 
+* Usar `TODO` para anotar a adição de features e funciolidades posteriormente.
+* Usar `FIXME` para anotar um código quebrado que necessita ser finalizado.
+* Usar `OPTIMIZE` para anotar um código que afeta a performance e deve ser melhorado.
+* Usar `HACK` para anotar um código questionável em sua prática de programação e que pode ser refatorado.
+* Usar `REVIEW` para anotar se parte do código está realmente inteligível. 
+
 ## 3 Declaração de Variáveis
 
 * Na declaração de variáveis deve-se manter um nome conexo com a ação da variável.
@@ -124,7 +146,7 @@ for current_iteration_number in 1..100 do
     # body omitted
 end
 ```
-* Apesar do padrão acima, deve-se evitar o uso do `for`, a não ser em casos que seja extremamente necessário
+* Apesar do padrão acima, deve-se evitar o uso do `for`, a não ser em casos que seja extremamente necessário.
 
 ```ruby
 arr = [1, 2, 3]
@@ -145,7 +167,28 @@ elem #=> NameError: undefined local variable or method 'elem'
 
 end
 ```
+* Evitar utilizar `do-end` para blocos de apenas uma linha em `each`, caso contrário, em bloco de mais de uma linha, utiliza-se o `do-end`.
 
+``` ruby
+names = ['Bozhidar', 'Steve', 'Sarah']
+
+# bad
+names.each do |name|
+  puts name
+end
+
+# good
+names.each { |name| puts name }
+
+# bad
+names.select do |name|
+  name.start_with?('S')
+end.map { |name| name.upcase }
+
+# good
+names.select { |name| name.start_with?('S') }.map { |name| name.upcase }
+
+```
 ### 7.4 Declaração `if-else, if-elsif-else e unless`
 ``` ruby
   if some_condition
@@ -197,6 +240,7 @@ end
 
 ## 9 Outras expressões
 
+### 9.1 Strings
 * Prefira ```%w``` para a sintaxe de um array literal quando precisar de array de strings.
 
 ``` ruby
@@ -214,8 +258,31 @@ hash = { :one => 1, :two => 2, :three => 3 }
 ``` ruby
   email_with_name = "#{user.name} <#{user.email}>"
 ```
+* Usar `" "` ao invés de `' '` para declaração de string.
 
+### 9.2 Hashs e arrays
 
+* Preferir utilizar `array = []` e `hash = {}` do que `array = Array.new` e `hash = Hash.new` a não ser que sejam passados parâmetros para construtor.
+
+``` ruby
+# ruim
+array = Array.new
+hash = Hash.new
+
+# bom
+array = []
+hash = {}
+```
+### 9.3 Números
+
+* Para números grandes, é melhor declarar seu literal pois fica mais fácil de interpretar
+
+``` ruby
+# ruim
+number = 1000000
+# bom
+number = 1_000_000
+```
 
 Referências: 
 * [Ruby Style Sheet](https://github.com/bbatsov/ruby-style-guide) 
