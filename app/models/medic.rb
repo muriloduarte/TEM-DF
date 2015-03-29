@@ -6,11 +6,10 @@ class Medic < ActiveRecord::Base
 	has_many :rating, through: :user
 	has_many :comments
 
+	# REVIEW: Is necessary this methos to be here? Probabily would be better fit #	on controller action.
 	def self.search(speciality, work_unit)
-
 		if work_unit != "Informe a Região"
 			@work_unit_instance = WorkUnit.find_by_name(work_unit)
-
 			if(@work_unit_instance)
 				if speciality != "Informe a Especialidade"
 					where("speciality =  ? AND work_unit_id = ?", speciality,@work_unit_instance.id).all
@@ -18,7 +17,6 @@ class Medic < ActiveRecord::Base
 					where("work_unit_id = ?", @work_unit_instance.id).all
 				end
 			end
-
 		elsif speciality != "Informe a Especialidade"
 			where("speciality =  ?", speciality).all
 		else
