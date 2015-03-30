@@ -10,8 +10,8 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: 5
-  username: TEMDF
-  password: TEMDF
+  username: <%= ENV["user"] %>
+  password: <%= ENV["pwd"] %>
   socket: /var/run/mysqld/mysqld.sock
 
 development:
