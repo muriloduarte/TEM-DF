@@ -1,8 +1,7 @@
 class CommentsController < ApplicationController
 	def reports
 		@user = User.find_by_id(session[:remember_token])
-
-      	if @user && @user.username == "admin"
+    if @user && @user.username == "admin"
 			@reported_comments = Comment.all.where(report: true)
 		else
 			redirect_to root_path
@@ -13,6 +12,8 @@ class CommentsController < ApplicationController
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment
 			@comment.update_attribute(:comment_status, false)
+		else
+			# Nothing to do
 		end
 		redirect_to reported_comments_path
 	end
@@ -21,6 +22,8 @@ class CommentsController < ApplicationController
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment
 			@comment.update_attribute(:comment_status, true)
+		else
+			# Nothing to do
 		end
 		redirect_to reported_comments_path
 	end
@@ -29,6 +32,8 @@ class CommentsController < ApplicationController
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment
 			@comment.update_attribute(:report, false)
+		else
+			# Nothing to do
 		end
 		redirect_to reported_comments_path
 	end

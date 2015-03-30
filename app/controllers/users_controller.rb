@@ -1,173 +1,159 @@
-require 'bcrypt'
+require "bcrypt"
 
 class UsersController < ApplicationController
-    def index
-        @user = User.find_by_id(session[:remember_token])
+  def index
+    @user = User.find_by_id(session[:remember_token])
+    if @user && @user.username == "admin" 
+      @users = User.all
+    else
+      redirect_to root_path
+    end
+  end
 
-      if @user && @user.username == "admin" 
-        @users = User.all
-      else
+  def create
+    @user = User.new(user_params)
+    if @user.account_status == false && !params[:user][:document]
+      flash.now.alert = "Você precisa anexar um documento!"
+      render "new"
+    elsif @user.password == @user.password_confirmation 
+      @user.account_status = false
+      if @user.save
+        upload params[:user][:document]
+        if params[:user][:document] == nil
+          random = Random.new
+          @user.update_attribute(:token_email, random.seed)
+          @user.update_attribute(:medic_type_status, false)
+          TemdfMailer.confimation_email(@user.id, @user.token_email, @user.email).deliver
+          flash[:notice] = "Por favor confirme seu cadastro pela mensagem enviada ao seu email!"
+        else
+          @user.update_attribute(:medic_type_status, true)
+          flash[:notice] = "Nossa equipe vai avaliar seu cadastro. Por favor aguarde a nossa aprovação para acessar sua conta!"
+        end
         redirect_to root_path
+      else
+        render "new"
       end
+    else
+      render "new"
+    end
+  end
 
-  	end
+  def new
+    @user = User.new
+  end
 
-  	def create
-  		@user = User.new(user_params)
-        if @user.account_status == false && !params[:user][:document]
-            flash.now.alert = "Você precisa anexar um documento!"
-            render "new"
-        elsif  @user.password == @user.password_confirmation
-            
-            @user.account_status = false
-            if @user.save
-                upload params[:user][:document]
-                
-                if params[:user][:document] == nil
-                    random = Random.new
-                    @user.update_attribute(:token_email, random.seed)
-                     @user.update_attribute(:medic_type_status, false)
-                    TemdfMailer.confimation_email(@user.id, @user.token_email, @user.email).deliver
-                    flash[:notice] = "Por favor confirme seu cadastro pela mensagem enviada ao seu email!"
-                else
-                    @user.update_attribute(:medic_type_status, true)
-                    flash[:notice] = "Nossa equipe vai avaliar seu cadastro. Por favor aguarde a nossa aprovação para acessar sua conta!"
-                end
-                redirect_to root_path
-            else
-                render "new"
-            end
-        else
-            render "new"
+  def edit
+    @user = User.find_by_id(session[:remember_token])
+  end
+
+  def edit_password
+    @user = User.find_by_id(session[:remember_token]) 
+  end
+
+  def update
+    @user = User.find_by_id(session[:remember_token])
+    if @user
+      if @user.username == "admin" # Admin's update
+        email = params[:user][:email]
+        user_from_email = User.find_by_email(email)
+        if user_from_email && @user != user_from_email
+          flash[:alert] = "Email já existente"
+          render "edit" 
+        else 
+          @user.update_attribute(:email , email)
+          redirect_to root_path, notice: 'Usuário alterado!'
         end
-  	end
-
-  	def new
-  		@user = User.new
-  	end
-
-    def edit
-        @user = User.find_by_id(session[:remember_token])
-    end
-
-    def edit_password
-        @user = User.find_by_id(session[:remember_token]) 
-    end
-
-    def update
-      @user = User.find_by_id(session[:remember_token])
-
-        if @user
-          if @user.username == "admin" #admin's update
-            email = params[:user][:email]
-
-            user_from_email = User.find_by_email(email)
-
-            if user_from_email && @user != user_from_email
-                flash[:alert] = "Email já existente"
-                render "edit" 
-            else 
-                @user.update_attribute(:email , email)
-                redirect_to root_path, notice: 'Usuário alterado!'
-            end
-
-          else #commom user's update 
-            username = params[:user][:username]
-            email = params[:user][:email]
-
-            user_from_username = User.find_by_username(username)
-            user_from_email = User.find_by_email(email)
-
-            if user_from_username && @user != user_from_username
-                flash[:alert] = "Nome já existente"
-                render "edit"
-            elsif user_from_email && @user != user_from_email
-                flash[:alert] = "Email já existente"
-                render "edit" 
-            else 
-                @user.update_attribute(:username , username)
-                @user.update_attribute(:email , email)
-                redirect_to root_path, notice: 'Usuário alterado!'
-            end
-          end
-        else
-            redirect_to root_path
+      else # Commom user's update 
+        username = params[:user][:username]
+        email = params[:user][:email]
+        user_from_username = User.find_by_username(username)
+        user_from_email = User.find_by_email(email)
+        if user_from_username && @user != user_from_username
+          flash[:alert] = "Nome já existente"
+          render "edit"
+        elsif user_from_email && @user != user_from_email
+          flash[:alert] = "Email já existente"
+          render "edit" 
+        else 
+          @user.update_attribute(:username , username)
+          @user.update_attribute(:email , email)
+          redirect_to root_path, notice: "Usuário alterado!"
         end
+      end
+    else
+      redirect_to root_path
     end
+  end
 
-    def update_password
-      @user_session = User.find_by_id(session[:remember_token])
-      
-        if @user_session
-            @user = User.authenticate(@user_session.username, params[:user][:password])
-            new_password = params[:user][:new_password]
-            
-            if params[:user][:password_confirmation] == new_password && !new_password.blank?
-              @user.update_attribute(:password, new_password)
-              redirect_to root_path, notice: 'Alteração feita com sucesso'
-            else
-              redirect_to edit_password_path, alert: 'Confirmação nao confere ou campo vazio'
-            end
+  def update_password
+    @user_session = User.find_by_id(session[:remember_token])
+    if @user_session
+        @user = User.authenticate(@user_session.username, params[:user][:password])
+        new_password = params[:user][:new_password]
+        if params[:user][:password_confirmation] == new_password && !new_password.blank?
+          @user.update_attribute(:password, new_password)
+          redirect_to root_path, notice: "Alteração feita com sucesso"
         else
-          redirect_to edit_password_path
+          redirect_to edit_password_path, alert: "Confirmação nao confere ou campo vazio"
         end
+    else
+      redirect_to edit_password_path
     end
-    
-    def desactivate
-        @user = User.find_by_id(session[:remember_token])
+  end
 
-        if @user && @user.username != "admin"
-            @user.update_attribute(:account_status, false)
-            redirect_to logout_path
-        else
-          @user = User.find_by_id(params[:id])
-
-          if @user
-            @user.update_attribute(:account_status, false)
-            redirect_to(action: "index")
-          else
-            redirect_to root_path
-          end
-        end
-    end
-
-     def reactivate
+  def desactivate
+    @user = User.find_by_id(session[:remember_token])
+    if @user && @user.username != "admin"
+        @user.update_attribute(:account_status, false)
+        redirect_to logout_path
+    else
       @user = User.find_by_id(params[:id])
       if @user
-        @user.update_attribute(:account_status, true)
+        @user.update_attribute(:account_status, false)
         redirect_to(action: "index")
       else
         redirect_to root_path
       end
     end
+  end
 
-    def confirmation_email
+  def reactivate
+    @user = User.find_by_id(params[:id])
+    if @user
+      @user.update_attribute(:account_status, true)
+      redirect_to(action: "index")
+    else
+      redirect_to root_path
+    end
+  end
 
-        @user = User.find_by_id_and_token_email(params[:id],params[:token_email])
-        @message = ''
+  def confirmation_email
+    @user = User.find_by_id_and_token_email(params[:id],params[:token_email])
+    @message = ""
+    if @user && @user.token_email
+      @user.update_attribute(:account_status, true)
+      @user.update_attribute(:token_email, nil)
+      @message = "Cadastro Confirmado!"
+    else
+      @message = "Link inválido!"
+    end
+    redirect_to root_path, notice: @message
+  end
 
-        if @user && @user.token_email
-          @user.update_attribute(:account_status, true)
-          @user.update_attribute(:token_email, nil)
-          @message = "Cadastro Confirmado!"
-        else
-          @message = "Link inválido!"
-        end
-        redirect_to root_path, notice: @message
+  private
+    def user_params
+      params.require(:user).permit(:username, :email, :password, :password_confirmation, :account_status)
     end
 
-    private
-        def user_params
-            params.require(:user).permit(:username, :email, :password, :password_confirmation, :account_status)
+    def upload(uploaded_io)
+        if uploaded_io
+          File.open(Rails.root.join('public', 'uploads', 'arquivo_medico'), 'wb') do |file| 
+            file.write(uploaded_io.read)
+          end
+          # Send file to temdf email
+          TemdfMailer.request_account.deliver
+        else 
+          # Nothing to do
         end
-
-        def upload(uploaded_io)
-            if uploaded_io
-                File.open(Rails.root.join('public', 'uploads', 'arquivo_medico'), 'wb') do |file| 
-                    file.write(uploaded_io.read)
-                end
-                # send file to temdf email
-                TemdfMailer.request_account.deliver
-            end
-        end
+    end
 end

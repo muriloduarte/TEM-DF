@@ -1,10 +1,9 @@
-require 'valid_email'
-require 'bcrypt'
+require "valid_email"
+require "bcrypt"
 
 class User < ActiveRecord::Base
 	has_many :comments
 	has_many :relevance
-
 	has_one :rating
 
 	attr_accessor :password, :password_confirmation, :new_password, :document
@@ -18,7 +17,6 @@ class User < ActiveRecord::Base
 
 	def self.authenticate(username, password)
 		user = find_by_username_and_account_status(username,true)
-
 		if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
 			user
 		else
@@ -27,13 +25,15 @@ class User < ActiveRecord::Base
 	end
 
 	def encrypt_password
-	    if password.present?
+	   if password.present?
 			self.password_salt = BCrypt::Engine.generate_salt
 			self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
-	    end
-  	end
+		else
+			# Nothing to do
+	  end
+  end
 
-  	def send_password_reset
+  def send_password_reset
 	  generate_token(:password_reset_token)
 	  self.password_reset_sent_at = Time.zone.now
 	  update_attribute(:password_reset_token , password_reset_token)
