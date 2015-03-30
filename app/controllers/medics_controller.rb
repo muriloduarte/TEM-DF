@@ -146,7 +146,7 @@ class MedicsController < ApplicationController
   		sum = 0
 			@ratings.each { |r| sum += r.grade}
 			arithmetic_mean_averange = sum / (1.0 * @ratings.size)
-			medic.update_attributes(:average => sum / arithmetic_mean_averange
+			medic.update_attributes(:average => arithmetic_mean_averang)
 			arithmetic_mean_averange
 		end
 	end
