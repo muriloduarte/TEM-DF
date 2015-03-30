@@ -1,6 +1,7 @@
 require "bcrypt"
 
 class UsersController < ApplicationController
+  # Method to verify if the user is admin and set distinct values
   def index
     @user = User.find_by_id(session[:remember_token])
     if @user && @user.username == "admin" 
@@ -10,6 +11,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # Method to create a user
   def create
     @user = User.new(user_params)
     if @user.account_status == false && !params[:user][:document]
@@ -38,18 +40,22 @@ class UsersController < ApplicationController
     end
   end
 
+  # Auxiliar method to create a user
   def new
     @user = User.new
   end
 
+  # Method to find a user by id and assist to update user's information
   def edit
     @user = User.find_by_id(session[:remember_token])
   end
 
+  # Method to find a user by id and assist to update user's password
   def edit_password
     @user = User.find_by_id(session[:remember_token]) 
   end
 
+  # Method to update user's information
   def update
     @user = User.find_by_id(session[:remember_token])
     if @user
@@ -85,6 +91,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # Method to update user's password
   def update_password
     @user_session = User.find_by_id(session[:remember_token])
     if @user_session
@@ -101,6 +108,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # Method to desactivate a user
   def desactivate
     @user = User.find_by_id(session[:remember_token])
     if @user && @user.username != "admin"
@@ -117,6 +125,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # Method to reactivate a user
   def reactivate
     @user = User.find_by_id(params[:id])
     if @user
@@ -127,6 +136,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # Method to verify the token from user and confirm account
   def confirmation_email
     @user = User.find_by_id_and_token_email(params[:id],params[:token_email])
     @message = ""
@@ -141,15 +151,15 @@ class UsersController < ApplicationController
   end
 
   private
+    #Method to set user's params
     def user_params
       params.require(:user).permit(:username, :email, :password, :password_confirmation, :account_status)
     end
 
+    # Method to upload an archive 
     def upload(uploaded_io)
         if uploaded_io
-          File.open(Rails.root.join('public', 'uploads', 'arquivo_medico'), 'wb') do |file| 
-            file.write(uploaded_io.read)
-          end
+          File.open(Rails.root.join('public', 'uploads', 'arquivo_medico'), 'wb') { |file| file.write(uploaded_io.read) }
           # Send file to temdf email
           TemdfMailer.request_account.deliver
         else 
