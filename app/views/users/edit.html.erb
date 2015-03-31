@@ -12,8 +12,6 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <%= content_tag :div, msg, :id => "flash_#{name}" %>
           </div>
-        <% else %>
-          <% #nothing to do %>
         <% end %>
       <% end %>
       <%= form_for @user do |f| %>
@@ -34,8 +32,6 @@
         
         <% if @user.username != "admin" %>
           <%= link_to "Desativar conta", desactivate_account_path ,class: "btn btn-danger" %>
-        <% else %>
-          <% #nothing to do %>
         <% end %>  
       <% end %>
     </div>

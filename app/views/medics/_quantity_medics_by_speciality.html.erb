@@ -37,14 +37,12 @@ $(document).ready(function() {
 
 <% if @array_speciality.size >= 30 && @array_speciality.size <= 45%>
 	<div class="col-sm-7" id="container<%=@id%>" style="height:1820px"></div>
-	<% elsif @array_speciality.size <= 15 && @array_speciality.size > 5%>
+<% elsif @array_speciality.size <= 15 && @array_speciality.size > 5%>
 	<div class="col-sm-7" id="container<%=@id%>" style="height:680px"></div>
-	<% elsif @array_speciality.size <= 5 && @array_speciality.size >=1%>
+<% elsif @array_speciality.size <= 5 && @array_speciality.size >=1%>
 	<div class="col-sm-7" id="container<%=@id%>" style="height:280px"></div>
-	<% elsif @array_speciality.size > 45 %>
+<% elsif @array_speciality.size > 45 %>
 	<div class="col-sm-7" id="container<%=@id%>" style="height:2780px"></div>
-	<% else %>
-	<div class="col-sm-7" id="container<%=@id%>" style="height:1080px"></div>
 <% else %>
-  <% #nothing to do %>
+	<div class="col-sm-7" id="container<%=@id%>" style="height:1080px"></div>
 <% end %>
