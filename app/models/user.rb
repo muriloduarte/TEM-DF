@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
 	validates :password_confirmation, presence: true
 	validates :new_password, presence: true, :on => [:updatePassword]
 
+	# Method to autenticate user with password
 	def self.authenticate(username, password)
 		user = find_by_username_and_account_status(username,true)
 		if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
@@ -24,6 +25,7 @@ class User < ActiveRecord::Base
 		end
 	end
 
+	# Method to encrypt password
 	def encrypt_password
 	   if password.present?
 			self.password_salt = BCrypt::Engine.generate_salt
@@ -33,6 +35,7 @@ class User < ActiveRecord::Base
 	  end
   end
 
+  # Method to send to user's email password reset
   def send_password_reset
 	  generate_token(:password_reset_token)
 	  self.password_reset_sent_at = Time.zone.now
@@ -40,6 +43,8 @@ class User < ActiveRecord::Base
 	  UserMailer.password_reset(self).deliver
 	end
 
+	# Method to generate token which will be used in password reset and 
+	# confirmation email
 	def generate_token(column)
 	  begin
 	    self[column] = SecureRandom.urlsafe_base64

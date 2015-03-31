@@ -1,15 +1,17 @@
+# Populates the database with file named schedule.csv
 class ParsersController < ApplicationController
 
+	# Reload the page index
 	def index
 		render "index"
 	end
 
-	def upload
+	# Upload schedule.csv file in the database
+ 	def upload
 		document = params[:document]
 		if document
-			File.open(Rails.root.join('public', 'csv', 'schedules.csv'), 'wb') do |file|
-				file.write(document.read)
-			end
+			File.open(Rails.root.join('public', 'csv', 'schedules.csv'), 'wb') {     |file| file.write(document.read)
+			}
 			Parser.save_data('public/csv/schedules.csv')
 			redirect_to root_path
 		else
