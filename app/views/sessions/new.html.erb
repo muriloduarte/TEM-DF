@@ -11,6 +11,8 @@
                       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                       <%= content_tag :div, msg, :id => "flash_#{name}" %>
                     </div>
+                  <% else %>
+                    <% #nothing to do %>
                   <% end %>
                 <% end %>
                 <div class="panel-body">

@@ -8,6 +8,7 @@
 		                        <i class="fa fa-exclamation fa-5x"></i>
 		                    </div>
 		                    <div class="col-xs-9 text-right">
+		                    	<% #REVIEW: It does not hurt the architecture? %>
 		                        <div class="huge"><%= Comment.all.where(report: true).size %></div>
 		                        <div>Denúncias</div>
 		                    </div>
@@ -31,6 +32,7 @@
 		                        <i class="fa fa-ban fa-5x"></i>
 		                    </div>
 		                    <div class="col-xs-9 text-right">
+		                    	<% #REVIEW: It does not hurt the architecture? %>
 		                        <div class="huge"><%= User.all.where(account_status: false).size %></div>
 		                        <div>Usuarios Desativados</div>
 		                    </div>
@@ -54,6 +56,7 @@
 	                        <i class="fa fa-users fa-5x"></i>
 	                    </div>
 	                    <div class="col-xs-9 text-right">
+	                    	<% #REVIEW: It does not hurt the architecture? %>
 	                        <div class="huge"><%= User.all.where(account_status: true).size %></div>
 	                        <div>Usuarios Ativados</div>
 	                    </div>
