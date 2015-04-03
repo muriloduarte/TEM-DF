@@ -1,5 +1,5 @@
 # File: comments_controller.rb
-# Purpose: Contains action methods for comments view
+# Purpose of class: Contains action methods for comments view
 # This software follows GPL license.
 # TEM-DF Group
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
