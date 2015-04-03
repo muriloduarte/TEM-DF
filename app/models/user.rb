@@ -1,3 +1,9 @@
+# File: user.rb
+# Purpose: Responsible for processing, validating, associate, and other tasks 					 in the treatment of user's data.
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
+
 require "valid_email"
 require "bcrypt"
 
