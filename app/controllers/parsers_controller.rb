@@ -1,4 +1,8 @@
-# Populates the database with file named schedule.csv
+################################################################################File: parsers_controller.rb
+#Purpose: Populates the database with file named schedule.csv
+#Notice: TEM-DF. Todos Direitos Reservados
+###############################################################################
+
 class ParsersController < ApplicationController
 
 	# Reload the page index

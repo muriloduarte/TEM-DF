@@ -1,5 +1,9 @@
+################################################################################File: sessions_controller.rb
+#Purpose: Create and destroy sessions when users perform login or logout
+#Notice: TEM-DF. Todos Direitos Reservados
+###############################################################################
+
 # Encoding UTF-8
-# Create and destroy sessions when users perform login or logout
 class SessionsController < ApplicationController
 
   def new

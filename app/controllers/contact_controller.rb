@@ -1,4 +1,8 @@
-# Contact class between the user and administrators
+################################################################################File: contact_controller.rb
+#Purpose: Contact class between the user and administrators
+#Notice: TEM-DF. Todos Direitos Reservados
+###############################################################################
+
 class ContactController < ApplicationController
 
 	def new

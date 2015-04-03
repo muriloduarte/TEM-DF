@@ -1,8 +1,11 @@
-# Existential condition
+################################################################################File: rating.rb
+#Purpose: Defines the relationship between users, medics and ratings
+#Notice: TEM-DF. Todos Direitos Reservados
+###############################################################################
+
 require "user"
 require "medic"
 
-# Defines the relationship between users, medics and ratings
 class Rating < ActiveRecord::Base
 
 	belongs_to :user

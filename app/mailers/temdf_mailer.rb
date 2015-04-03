@@ -1,4 +1,8 @@
-# Creates the body of emails according to standard and requested type
+################################################################################File: temdf_mailer.rb
+#Purpose: Creates the body of emails according to standard and requested type
+#Notice: TEM-DF. Todos Direitos Reservados
+###############################################################################
+
 class TemdfMailer < ActionMailer::Base
   
   default from: "temdf.unb@gmail.com"
