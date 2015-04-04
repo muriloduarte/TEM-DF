@@ -1,4 +1,8 @@
-# Creates the body of emails to reset user account password
+# File: user_mailer.rb
+# Purpose of class: Creates the body of emails to reset user account password
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class UserMailer < ActionMailer::Base
   
   default from: "temdf.unb@gmail.com"
