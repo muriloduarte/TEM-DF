@@ -1,8 +1,8 @@
-################################################################################File: rating.rb
-#Purpose: Defines the relationship between users, medics and ratings
-#Notice: TEM-DF. Todos Direitos Reservados
-###############################################################################
-
+# File: rating.rb
+# Purpose of class: Defines the relationship between users, medics and ratings
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 require "user"
 require "medic"
 

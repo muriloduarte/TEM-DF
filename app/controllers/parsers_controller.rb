@@ -1,8 +1,8 @@
-################################################################################File: parsers_controller.rb
-#Purpose: Populates the database with file named schedule.csv
-#Notice: TEM-DF. Todos Direitos Reservados
-###############################################################################
-
+# File: parsers_controller.rb
+# Purpose of class: Populates the database with file named schedule.csv
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class ParsersController < ApplicationController
 
 	# Reload the page index

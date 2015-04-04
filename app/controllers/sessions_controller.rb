@@ -1,9 +1,9 @@
-################################################################################File: sessions_controller.rb
-#Purpose: Create and destroy sessions when users perform login or logout
-#Notice: TEM-DF. Todos Direitos Reservados
-###############################################################################
-
-# Encoding UTF-8
+# File: sessions_controller.rb
+# Purpose of class: Create and destroy sessions when users perform,
+# login or logout.
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class SessionsController < ApplicationController
 
   def new
