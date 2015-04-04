@@ -1,3 +1,9 @@
+# File: application_controller.rb 
+# Purpose of class: This class is a controller and contains action methods for 
+# general application view.
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.

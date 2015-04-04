@@ -1,3 +1,9 @@
+# File: password_resets_controller.rb 
+# Purpose of class: This class is a controller and contains action methods for 
+# password resets view.
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasílias
 class PasswordResetsController < ApplicationController
 
 	def new
