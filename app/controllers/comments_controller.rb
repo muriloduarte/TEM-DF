@@ -3,7 +3,6 @@
 # This software follows GPL license.
 # TEM-DF Group
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
-
 class CommentsController < ApplicationController
 	# Method to report a comment
 	def reports
