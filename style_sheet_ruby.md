@@ -13,13 +13,13 @@
 O código deve possuir um cabeçalho no estilo:
 
 ```
- ###############################################################################File: Nome do arquivo.extensao (Ex.: User.rb)
- #Purpose: Propósito da classe (Ex.: Esta classe modela todos os usuários)
- #Notice: Direitos Autorais (Ex.: (c) TEM-DF. Todos Direitos Reservados)
- ##############################################################################
+################################################################################File: Nome do arquivo.extensao (Ex.: User.rb)
+#Purpose: Propósito da classe (Ex.: Esta classe modela todos os usuários)
+#Notice: Direitos Autorais (Ex.: TEM-DF. Todos Direitos Reservados)
+###############################################################################
 ```
 
-Contendo o nome da classe, uma breve descrição da mesma e um aviso de direitos autorais.
+Contendo o nome da classe, uma breve descrição da mesma e um aviso de direitos autorais, e após fechar o cabeçalho, quebre uma linha antes de iniciar a codificação.
 
 ##2 - Comentários
 
