@@ -23,6 +23,7 @@ class Parser < ActiveRecord::Base
 	# 6 - Data de fim
 	# 7 - Horário de entrada
 	# 8 - Horário de saída
+	# Method to fill database
 	def self.save_data(file)
 		CSV.foreach(file, :col_sep => ";", :headers => true ) do |row|
 			start_date = DateTime.parse(row[5] + " " + row[7])

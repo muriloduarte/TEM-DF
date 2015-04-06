@@ -11,6 +11,7 @@ class MedicsController < ApplicationController
 
 	helper_method :array_speciality, :array_medics_quantity
 
+	# Method to collect medics
 	def results
 		@medics = Medic.search(params[:list_specility], params[:list_work_unit_name																										 ])
 		if @medics
@@ -21,6 +22,7 @@ class MedicsController < ApplicationController
   		end
 	end
 
+	# Method to collect a medic's information
 	def profile
 		@medic = Medic.find_by_id(params[:id])
 		@work_unit = WorkUnit.find_by_id(@medic.work_unit_id)
@@ -29,7 +31,7 @@ class MedicsController < ApplicationController
 	end
 	
 	# REVIEW: Can be renamed.
-	# Show the work units X  quantity medics by region.
+	# Method to show the work units X  quantity medics by region.
 	def workunits_graph
 		@medics_size = []
 		@unit_name = []
@@ -40,7 +42,7 @@ class MedicsController < ApplicationController
 			@unit_name.push(work_unit.name)
 		end
 	end
-
+	# Method to fill array of medic's speciality 
 	def array_speciality (id_work_unit)
 		@medic = Medic.all.where(work_unit_id: id_work_unit)
 		@speciality = []
@@ -48,11 +50,11 @@ class MedicsController < ApplicationController
 			unless @speciality.include?(medic.speciality)
 				@speciality.push(medic.speciality)
 			end
-		end
-		
+		end	
 		@speciality
 	end
 
+	# Method to fill array of speciality's quantity  
 	def array_medics_quantity (id_work_unit, array_speciality)
 		@medic = Medic.all.where(work_unit_id: id_work_unit)
 		@medics_size_speciality = []
@@ -66,6 +68,7 @@ class MedicsController < ApplicationController
 		@medics_size_speciality
 	end
 	
+	# Method to rating a medic
 	def rating
 		medic_id = params[:medic_id]
 		@user = User.find_by_id(session[:remember_token])
@@ -86,6 +89,7 @@ class MedicsController < ApplicationController
 		end
 	end
 
+	# Method to create a comment of a medic
 	def create_comment
 		@user = User.find_by_id(session[:remember_token])
 		@medic = Medic.find_by_id(params[:medic_id])
@@ -99,6 +103,7 @@ class MedicsController < ApplicationController
 		end
 	end
 
+	#Method to create relevance of a comment
 	def create_relevance		
 		@user = User.find_by_id(session[:remember_token])
 		@comment = Comment.find_by_id(params[:comment_id])
@@ -115,6 +120,7 @@ class MedicsController < ApplicationController
 		end
 	end
 
+	# Methos to report a undue comment
 	def to_report
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment.report == false
@@ -124,16 +130,19 @@ class MedicsController < ApplicationController
 		redirect_to action:"profile",id: params[:medic_id]
 	end
 
+	# Method to list top 10 medics
 	def ranking
 		@medics = Medic.order(average: :desc).limit(10)
 	end
 
   private 
+  # Method to create rating of a medic
 	def create_rating(user, medic)
 		@rating = Rating.new(grade: params[:grade], user: user, medic: medic, date: Time.current)
 		@rating.save
 	end
 
+# Method to change an existing rating
 	def update_rating(rating,grade)
 		if grade != NOT_EXIST_GRADE
 			rating.update_attribute(:grade , grade)
@@ -144,6 +153,7 @@ class MedicsController < ApplicationController
 	end
 
 	# REVIEW: What is sum / (1.0 * @ratings.size? Create a variable for this.   # Rename the variable r of each
+	# Method to caculate average of all rating of a medic
 	def calculate_average(medic)
 		@ratings = Rating.all.where(medic_id: medic.id)
 		if @ratings.size == NOT_EXIST_RATING
