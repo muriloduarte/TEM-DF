@@ -1,3 +1,9 @@
+# File: users_controller.rb 
+# Purpose of class: This class is a controller and contains action methods for 
+# users view.
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 require "bcrypt"
 
 class UsersController < ApplicationController

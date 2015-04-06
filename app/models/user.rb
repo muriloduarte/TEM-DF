@@ -1,6 +1,12 @@
 require "valid_email"
 require "bcrypt"
 
+# File: user.rb
+# Purpose of class: This class is a model and contains attributes,            # associations and business methods for User entity.
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
+
 class User < ActiveRecord::Base
 	has_many :comments
 	has_many :relevance
