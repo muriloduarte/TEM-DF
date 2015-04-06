@@ -2,7 +2,7 @@ require "valid_email"
 require "bcrypt"
 
 # File: user.rb
-# Purpose of class: This class is a model and contains attributes,            # associations and business methods for User entity.
+# Purpose of class: Responsible for processing, validating, associate, other tasks in the treatment of user's data.
 # This software follows GPL license.
 # TEM-DF Group
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
