@@ -1,6 +1,12 @@
 require "bcrypt"
 
+# File: users_controller.rb
+# Purpose of class: Contain action methods for users view.
+# This software follows GPL license.
+# TEM-DF Group.
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília.
 class UsersController < ApplicationController
+
   # Method to verify if the user is admin and set distinct values
   def index
     @user = User.find_by_id(session[:remember_token])
