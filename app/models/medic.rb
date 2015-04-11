@@ -2,7 +2,6 @@ require "work_unit"
 
 # File: medic.rb
 # Purpose of class: This class is a model and contains attributes,            # associations and business methods for Medic entity.
-# password resets view.
 # This software follows GPL license.
 # TEM-DF Group
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília

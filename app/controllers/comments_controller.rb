@@ -4,7 +4,6 @@
 # TEM-DF Group.
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília.
 class CommentsController < ApplicationController
-
 	# Method to report a comment
 	def reports
 		@user = User.find_by_id(session[:remember_token])
