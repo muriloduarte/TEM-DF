@@ -1,4 +1,3 @@
-
 require "bcrypt"
 
 # File: users_controller.rb
@@ -28,6 +27,7 @@ class UsersController < ApplicationController
       if @user.save
         upload params[:user][:document]
         if params[:user][:document] == nil
+          # Generate a random number for use it in update password
           random = Random.new
           @user.update_attribute(:token_email, random.seed)
           @user.update_attribute(:medic_type_status, false)
@@ -66,29 +66,29 @@ class UsersController < ApplicationController
     @user = User.find_by_id(session[:remember_token])
     if @user
       if @user.username == "admin" # Admin's update
-        email = params[:user][:email]
-        user_from_email = User.find_by_email(email)
-        if user_from_email && @user != user_from_email
+        @email = params[:user][:email]
+        @user_from_email = User.find_by_email(@email)
+        if @user_from_email && @user != @user_from_email
           flash[:alert] = "Email já existente"
           render "edit" 
         else 
-          @user.update_attribute(:email , email)
+          @user.update_attribute(:email , @email)
           redirect_to root_path, notice: 'Usuário alterado!'
         end
       else # Commom user's update 
-        username = params[:user][:username]
-        email = params[:user][:email]
-        user_from_username = User.find_by_username(username)
-        user_from_email = User.find_by_email(email)
-        if user_from_username && @user != user_from_username
+        @username = params[:user][:username]
+        @email = params[:user][:email]
+        @user_from_username = User.find_by_username(@username)
+        @user_from_email = User.find_by_email(@email)
+        if @user_from_username && @user != @user_from_username
           flash[:alert] = "Nome já existente"
           render "edit"
-        elsif user_from_email && @user != user_from_email
+        elsif @user_from_email && @user != @user_from_email
           flash[:alert] = "Email já existente"
           render "edit" 
         else 
-          @user.update_attribute(:username , username)
-          @user.update_attribute(:email , email)
+          @user.update_attribute(:username , @username)
+          @user.update_attribute(:email , @email)
           redirect_to root_path, notice: "Usuário alterado!"
         end
       end
@@ -99,12 +99,13 @@ class UsersController < ApplicationController
 
   # Method to update user's password
   def update_password
+    # FIX ME: This crash when user enters a wrong passwor
     @user_session = User.find_by_id(session[:remember_token])
     if @user_session
         @user = User.authenticate(@user_session.username, params[:user][:password])
-        new_password = params[:user][:new_password]
-        if params[:user][:password_confirmation] == new_password && !new_password.blank?
-          @user.update_attribute(:password, new_password)
+        @new_password = params[:user][:new_password]
+        if params[:user][:password_confirmation] == @new_password && !@new_password.blank?
+          @user.update_attribute(:password, @new_password)
           redirect_to root_path, notice: "Alteração feita com sucesso"
         else
           redirect_to edit_password_path, alert: "Confirmação nao confere ou campo vazio"
