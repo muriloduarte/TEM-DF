@@ -12,6 +12,7 @@ class SessionsController < ApplicationController
   # Create sessions when users perform login 
   def create
     user = User.authenticate(params[:username], params[:password])
+    # Check the User existence and if your account is active
     if user && user.account_status == true
       session[:remember_token] = user.id
       session[:user_id] = user.id
