@@ -19,13 +19,16 @@ class UsersController < ApplicationController
   # Method to create a user
   def create
     @user = User.new(user_params)
+    # Check the user type 
     if @user.account_status == false && !params[:user][:document]
       flash.now.alert = "Você precisa anexar um documento!"
       render "new"
+    # Check whether the password and password_confirmation are the same
     elsif @user.password == @user.password_confirmation 
       @user.account_status = false
       if @user.save
         upload params[:user][:document]
+        # Check whether the user is common 
         if params[:user][:document] == nil
           # Generate a random number for use it in update password
           random = Random.new
@@ -33,6 +36,7 @@ class UsersController < ApplicationController
           @user.update_attribute(:medic_type_status, false)
           TemdfMailer.confimation_email(@user.id, @user.token_email, @user.email).deliver
           flash[:notice] = "Por favor confirme seu cadastro pela mensagem enviada ao seu email!"
+        # Or a medic user
         else
           @user.update_attribute(:medic_type_status, true)
           flash[:notice] = "Nossa equipe vai avaliar seu cadastro. Por favor aguarde a nossa aprovação para acessar sua conta!"
@@ -65,7 +69,8 @@ class UsersController < ApplicationController
   def update
     @user = User.find_by_id(session[:remember_token])
     if @user
-      if @user.username == "admin" # Admin's update
+    	# Admin's update
+      if @user.username == "admin" 
         @email = params[:user][:email]
         @user_from_email = User.find_by_email(@email)
         if @user_from_email && @user != @user_from_email
@@ -75,17 +80,21 @@ class UsersController < ApplicationController
           @user.update_attribute(:email , @email)
           redirect_to root_path, notice: 'Usuário alterado!'
         end
-      else # Commom user's update 
+      # Commom user's update 
+      else 
         @username = params[:user][:username]
         @email = params[:user][:email]
         @user_from_username = User.find_by_username(@username)
         @user_from_email = User.find_by_email(@email)
+        # Check if username is in use
         if @user_from_username && @user != @user_from_username
           flash[:alert] = "Nome já existente"
           render "edit"
+        # Check if the email is in use
         elsif @user_from_email && @user != @user_from_email
           flash[:alert] = "Email já existente"
           render "edit" 
+        # If not update attributes
         else 
           @user.update_attribute(:username , @username)
           @user.update_attribute(:email , @email)
@@ -116,11 +125,13 @@ class UsersController < ApplicationController
   end
 
   # Method to desactivate a user
-  def desactivate
+  def deactivate
     @user = User.find_by_id(session[:remember_token])
+    # Admin's deactivate
     if @user && @user.username != "admin"
         @user.update_attribute(:account_status, false)
         redirect_to logout_path
+    # User's deactivate
     else
       @user = User.find_by_id(params[:id])
       if @user
@@ -147,6 +158,7 @@ class UsersController < ApplicationController
   def confirmation_email
     @user = User.find_by_id_and_token_email(params[:id],params[:token_email])
     @message = ""
+    # Check if the user and token email are equivalent
     if @user && @user.token_email
       @user.update_attribute(:account_status, true)
       @user.update_attribute(:token_email, nil)
