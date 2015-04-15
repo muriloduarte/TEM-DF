@@ -21,14 +21,14 @@ class TemdfMailer < ActionMailer::Base
   def send_mail (subject, message, email, user_name)
    	mail(to: "temdf.unb@gmail.com", 
          subject: subject,
-		     body: "From: " + email + "\nNome: " + name + "\n\n" + message)
+		     body: "From: " + email + "\nNome: " + user_name + "\n\n" + message)
   end
   
   # Email template for registration confirmation
   def confimation_email (user_id, user_token_email, email)
     link = "http://0.0.0.0:3000/confirmation/" + user_id.to_s() + "/" + user_token_email.to_s()
 
-    mail(to: user_email,
+    mail(to: email,
          subject: "Confirme seu cadastro em TEM-DF!",
          body: "Confirme seu cadastro no link abaixo:\n\n#{link}")
   end  
