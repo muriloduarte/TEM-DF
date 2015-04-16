@@ -7,7 +7,6 @@ require "work_unit"
 # REVIEW: Maybe would be better if the method save_data stay on medic.rb.
 # File: parser.rb
 # Purpose of class: This class is a model and contains attributes,            # associations and business methods for Medic entity.
-# password resets view.
 # This software follows GPL license.
 # TEM-DF Group
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
@@ -24,6 +23,7 @@ class Parser < ActiveRecord::Base
 	# 6 - Data de fim
 	# 7 - Horário de entrada
 	# 8 - Horário de saída
+	# Method to fill database
 	def self.save_data(file)
 		CSV.foreach(file, :col_sep => ";", :headers => true ) do |row|
 			start_date = DateTime.parse(row[5] + " " + row[7])

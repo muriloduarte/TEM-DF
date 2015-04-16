@@ -8,7 +8,8 @@ class PasswordResetsController < ApplicationController
 
 	def new
 	end
-
+	#REVIEW: this method should have other name?
+	# Method for reset the password by email 
 	def create
 		@user = User.find_by_email_and_username(params[:email],params[:username])
 		if @user
@@ -19,9 +20,12 @@ class PasswordResetsController < ApplicationController
 		end
 	end
 
+	#REVIEW: this method should have other name?
+	# Method to redirect after password change
 	def edit
 		@user = User.find_by_password_reset_token(params[:id])
 		
+		#REVIEW:this conditional should not be different?
 		if !@user
 			redirect_to root_url, :notice => "A senha já foi alterada."
 		else
@@ -29,6 +33,7 @@ class PasswordResetsController < ApplicationController
 		end
 	end
 
+	#Method to change password
 	def update
 		@user = User.find_by_password_reset_token!(params[:id])
 		if @user.password_reset_sent_at < 2.hours.ago
