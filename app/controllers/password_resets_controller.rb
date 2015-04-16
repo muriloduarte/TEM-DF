@@ -3,16 +3,16 @@
 # password resets view.
 # This software follows GPL license.
 # TEM-DF Group
-# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasílias
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class PasswordResetsController < ApplicationController
 
 	def new
 	end
 
 	def create
-		user = User.find_by_email_and_username(params[:email],params[:username])
-		if user
-			user.send_password_reset 
+		@user = User.find_by_email_and_username(params[:email],params[:username])
+		if @user
+			@user.send_password_reset 
 			redirect_to root_path, :notice => "Um e-mail foi enviado com as instruções para #{:email}."
 		else
 			render 'new', :alert => "Email ou nome de usuário inválidos"

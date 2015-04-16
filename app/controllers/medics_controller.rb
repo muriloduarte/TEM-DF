@@ -6,9 +6,6 @@
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class MedicsController < ApplicationController
 
-	NOT_EXIST_RATING = 0
-	NOT_EXIST_GRADE = "0"
-
 	helper_method :array_speciality, :array_medics_quantity
 
 	def results
@@ -49,7 +46,6 @@ class MedicsController < ApplicationController
 				@speciality.push(medic.speciality)
 			end
 		end
-		
 		@speciality
 	end
 
@@ -143,6 +139,9 @@ class MedicsController < ApplicationController
     end
 	end
 
+	NOT_EXIST_RATING = 0
+	NOT_EXIST_GRADE = "0"
+
 	# REVIEW: What is sum / (1.0 * @ratings.size? Create a variable for this.   # Rename the variable r of each
 	def calculate_average(medic)
 		@ratings = Rating.all.where(medic_id: medic.id)
@@ -151,7 +150,7 @@ class MedicsController < ApplicationController
 		else
   		sum = 0
 			@ratings.each { |r| sum += r.grade}
-			arithmetic_mean_averange = sum / (1.0 * @ratings.size)
+				arithmetic_mean_averange = sum / (1.0 * @ratings.size)
 			medic.update_attributes(:average => arithmetic_mean_averang)
 			arithmetic_mean_averange
 		end
