@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
 	validates :email, uniqueness: true, presence: true, email: true
 	validates :password, presence: true
 	validates :password_confirmation, presence: true
-	validates :new_password, presence: true, :on => [:updatePassword]
+	validates :new_password, presence: true, :on => [:update_password]
 
 	# Method to autenticate user with password
 	def self.authenticate(username, password)

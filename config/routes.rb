@@ -29,9 +29,9 @@ Rails.application.routes.draw do
     
   get "login" => "sessions#new", :as => "login"
   get "logout" => "sessions#destroy", :as => "logout"
-  get "desactivate_account" => "users#desactivate", :as => "desactivate_account"
+  get "deactivate_account" => "users#deactivate", :as => "deactivate_account"
   get "/users/:id/reactivate_account" => "users#reactivate", :as => "reactivate_account"
-  get "/users/:id/desactivate_account" => "users#desactivate", :as => "desactivate_account_admin"
+  get "/users/:id/deactivate_account" => "users#deactivate", :as => "deactivate_account_admin"
   post "/upload", controller: 'parsers', action: 'upload'
 
   get "contact" => "contact#new", :as => "contact"
