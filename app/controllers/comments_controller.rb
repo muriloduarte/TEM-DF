@@ -6,7 +6,10 @@
 class CommentsController < ApplicationController
 	# Method to report a comment
 	def reports
+		#Receives an object of class User of current session
 		@user = User.find_by_id(session[:remember_token])
+
+		#checks if the User is admin
     if @user && @user.username == "admin"
 			@reported_comments = Comment.all.where(report: true)
 		else
@@ -16,6 +19,7 @@ class CommentsController < ApplicationController
 
 	# Method to deactivate a comment
 	def deactivate
+		#Receives an object of class User of current session
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment
 			@comment.update_attribute(:comment_status, false)
@@ -27,6 +31,7 @@ class CommentsController < ApplicationController
 
 	# Method to reactivate a comment
 	def reactivate
+		#Receives an object of class User of current session
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment
 			@comment.update_attribute(:comment_status, true)
@@ -38,6 +43,7 @@ class CommentsController < ApplicationController
 
 	# Method to remove the report in a comment
 	def disable_report
+		#Receives an object of class User of current session
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment
 			@comment.update_attribute(:report, false)
