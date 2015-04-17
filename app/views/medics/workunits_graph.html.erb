@@ -6,7 +6,7 @@
         <hr>   
           <table>
             <li class="">
-              <% @work_unit.each do |work_unit| %>
+              <% @work_units.each do |work_unit| %>
                 <tr>
                   <% if work_unit.name == "DRS CANDANGOL./BAND/RIAC.FUNDO"%>
                     <li class="">
@@ -41,7 +41,7 @@
   </div>
 </div>
 
-<% @work_unit.each do |work_unit| %> 
+<% @work_units.each do |work_unit| %> 
   <div class="tab-pane text-style" id="tab<%= work_unit.id %>">
     <h2>Quantidade de médicos em <%= work_unit.name %></h2>
     <hr>

@@ -13,6 +13,9 @@ class ApplicationController < ActionController::Base
 
 	# Verify if some user is logged on TEM-DF
 	def current_user
+
+		# Verify the current user logged, if nil, then storages the user by his 
+		# session id
 		@current_user ||= User.find(session[:user_id]) if session[:user_id]
 	end
 
@@ -20,12 +23,16 @@ class ApplicationController < ActionController::Base
 	end
 
   private
+
+  # List all medics specialities and call get_by_speciality_or_work_unit 
+  # method. 
 	def list_speciality
-		@medic= Medic.all
+		@medic  = Medic.all
 		get_by_speciality_or_work_unit(@medic)
 	end
 
-	# List all the work unit names
+	# List all work units name specialities and call
+	# get_by_speciality_or_work_unit method.
 	def list_work_unit_name
 		@work_unit = WorkUnit.all
 		get_by_speciality_or_work_unit(@work_unit)
@@ -33,22 +40,34 @@ class ApplicationController < ActionController::Base
 
 	# REVIEW: the argument object1 and "it" must be renamed! 
 	# Gets the doctor wich is passed in argument through of his speciality or    # work unit.
-	def get_by_speciality_or_work_unit(object1)
+	def get_by_speciality_or_work_unit(object_to_determine_type)
 		@speciality = []
 		@work_unit_name = []
-		medic = true
-		object1.each do |it|
-			if it.kind_of?(Medic)
-				unless @speciality.include?(it.speciality)
-					@speciality.push(it.speciality)
+
+		#variable bool which storage if the argument type is medic object
+		medic = true 
+
+		object_to_determine_type.each do |object|
+
+			# Verify the object type.
+			# If medic object, include speciality on spaciality array unless is
+			# included.
+			# Else not be medic object, then will be a work unit and it name will be
+			# included on work_unit_name unless be not is included this.
+			if object.kind_of?(Medic)
+				unless @speciality.include?(object.speciality)
+					@speciality.push(object.speciality)
 				end
 			else
-				unless @work_unit_name.include?(it.name)
-					@work_unit_name.push(it.name)
+				unless @work_unit_name.include?(object.name)
+					@work_unit_name.push(object.name)
 				end
 				medic = false
 			end
 		end
+
+		# If medic is true, then return speciality array, else, return work unit
+		# name array.
 		if medic
 			@speciality
 		else
