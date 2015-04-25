@@ -20,16 +20,17 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     # Check the user type 
-    if @user.account_status == false && !params[:user][:document]
+    @document = params[:user][:document]
+    if @user.account_status == false && !@document
       flash.now.alert = "Você precisa anexar um documento!"
       render "new"
     # Check whether the password and password_confirmation are the same
     elsif @user.password == @user.password_confirmation 
       @user.account_status = false
       if @user.save
-        upload params[:user][:document]
+        upload @document
         # Check whether the user is common 
-        if params[:user][:document] == nil
+        if @user_params_document == nil
           # Generate a random number for use it in update password
           random = Random.new
           @user.update_attribute(:token_email, random.seed)
@@ -108,16 +109,23 @@ class UsersController < ApplicationController
 
   # Method to update user's password
   def update_password
-    # FIX ME: This crash when user enters a wrong passwor
     @user_session = User.find_by_id(session[:remember_token])
+    # Check whether the user is logged
     if @user_session
         @user = User.authenticate(@user_session.username, params[:user][:password])
-        @new_password = params[:user][:new_password]
-        if params[:user][:password_confirmation] == @new_password && !@new_password.blank?
-          @user.update_attribute(:password, @new_password)
-          redirect_to root_path, notice: "Alteração feita com sucesso"
+        # Check whether the current password is correct
+        if @user
+        	@new_password = params[:user][:new_password]
+        	@password_confirmation = params[:user][:password_confirmation]
+        	# Check whether new password and confirmation password are the same
+        	if @password_confirmation == @new_password && !@new_password.blank?
+          	@user.update_attribute(:password, @new_password)
+          	redirect_to root_path, notice: "Alteração feita com sucesso"
+        	else
+          	redirect_to edit_password_path, alert: "Confirmação nao confere ou campo vazio"
+        	end
         else
-          redirect_to edit_password_path, alert: "Confirmação nao confere ou campo vazio"
+        	redirect_to edit_password_path, alert: "Senha errada"
         end
     else
       redirect_to edit_password_path
