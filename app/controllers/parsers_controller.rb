@@ -1,4 +1,8 @@
-# Populates the database with file named schedule.csv
+# File: parsers_controller.rb
+# Purpose of class: Populates the database with file named schedule.csv
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class ParsersController < ApplicationController
 
 	# Reload the page index
@@ -9,6 +13,7 @@ class ParsersController < ApplicationController
 	# Upload schedule.csv file in the database
  	def upload
 		document = params[:document]
+		# Checks for document and starts the parser
 		if document
 			File.open(Rails.root.join('public', 'csv', 'schedules.csv'), 'wb') {     |file| file.write(document.read)
 			}

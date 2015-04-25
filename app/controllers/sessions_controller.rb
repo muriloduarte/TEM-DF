@@ -1,5 +1,9 @@
-# Encoding UTF-8
-# Create and destroy sessions when users perform login or logout
+# File: sessions_controller.rb
+# Purpose of class: Create and destroy sessions when users perform,
+# login or logout.
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class SessionsController < ApplicationController
 
   def new
@@ -8,6 +12,7 @@ class SessionsController < ApplicationController
   # Create sessions when users perform login 
   def create
     user = User.authenticate(params[:username], params[:password])
+    # Check the User existence and if your account is active
     if user && user.account_status == true
       session[:remember_token] = user.id
       session[:user_id] = user.id

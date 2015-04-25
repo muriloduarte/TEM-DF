@@ -1,8 +1,11 @@
-# Existential condition
+# File: rating.rb
+# Purpose of class: Defines the relationship between users, medics and ratings
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 require "user"
 require "medic"
 
-# Defines the relationship between users, medics and ratings
 class Rating < ActiveRecord::Base
 
 	belongs_to :user

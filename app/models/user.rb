@@ -1,6 +1,11 @@
 require "valid_email"
 require "bcrypt"
 
+# File: user.rb
+# Purpose of class: Responsible for processing, validating, associate, other tasks in the treatment of user's data.
+# This software follows GPL license.
+# TEM-DF Group.
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília.
 class User < ActiveRecord::Base
 	has_many :comments
 	has_many :relevance
@@ -13,7 +18,7 @@ class User < ActiveRecord::Base
 	validates :email, uniqueness: true, presence: true, email: true
 	validates :password, presence: true
 	validates :password_confirmation, presence: true
-	validates :new_password, presence: true, :on => [:updatePassword]
+	validates :new_password, presence: true, :on => [:update_password]
 
 	# Method to autenticate user with password
 	def self.authenticate(username, password)

@@ -8,18 +8,26 @@
 
 
 
-## 1 Cabeçalho
+## 1 - Cabeçalho
 
-O código deve possuir um cabeçalho no estilo # ... contendo o nome da classe, uma breve descrição da mesma e um aviso de direitos autorais.
+O código deve possuir um cabeçalho no estilo:
 
-## 2 Comentários
+```
+################################################################################File: Nome do arquivo.extensao (Ex.: User.rb)
+#Purpose: Propósito da classe (Ex.: Esta classe modela todos os usuários)
+#Notice: Direitos Autorais (Ex.: TEM-DF. Todos Direitos Reservados)
+###############################################################################
+```
+
+Contendo o nome da classe, uma breve descrição da mesma e um aviso de direitos autorais, e após fechar o cabeçalho, quebre uma linha antes de iniciar a codificação.
+
+##2 - Comentários
 
 Para comentários de uma única linha deve-se começar com caracter #, dar espaço e iniciar a frase com letra maiúscula.
 ```ruby
 # This line is ignored by the ruby interpreter
 ```
 Para comentários de mais de uma linha NÃO se deve usar comentários em bloco iniciado com =begin e terminado com =end. Ao invés disso, deve-se usar comentários regulares de uma linha #
-
 
 ``` ruby
 # mau
@@ -33,12 +41,12 @@ outra linha de comentário
 # outra linha de comentário
 ```
 
-### 2.1 Comment annotations
+### 2.1 - Comment annotations
 
 * Serve para atentar sobre alguma eventualidade do código, alertar para alteração, melhoria, insegurança de algum trecho de código. 
 * Comment annotation é usado imediatamente acima de um determinado código.
 * É escrito com caracteres em maiúsculo, `:`, um espaço e a descrição.
-* Se houver linhas múltiplas, a descrição do annotation deverá ter três espaços depois de `#`:
+* Se houver linhas múltiplas, a descrição do annotation deverá ter 2 espaços depois da annotation:
 
 ``` ruby
 def bar
@@ -54,7 +62,7 @@ As annotations são listadas abaixo:
 * Usar `HACK` para anotar um código questionável em sua prática de programação e que pode ser refatorado.
 * Usar `REVIEW` para anotar se parte do código está realmente inteligível. 
 
-## 3 Declaração de Variáveis
+##3 - Declaração de Variáveis
 
 * Na declaração de variáveis deve-se manter um nome conexo com a ação da variável.
 * Deve-se colocar “@” antes de todas as variáveis de instancia;
@@ -62,14 +70,14 @@ As annotations são listadas abaixo:
 * Para variáveis compostas, mantem-se a escrita em letra minuscula, porem é necessário a utilização de “_” entre os nomes;
 * Deve-se inicializar os valores na declaração da variável;
 
-## 4 Declaração de classes e interfaces
+##4 - Declaração de classes e interfaces
 
 * Inicie criando o cabeçalho;
 * Declare as variáveis na seguinte ordem, públicas, protegidas e privadas;
 * Declare o construtor;
 * Declare os métodos;
 
-## 5 Indentação
+##5 - Indentação
 
 * Usar indentação de 2 espaços
 * Terminar cada arquivo com uma linha em branco
@@ -79,24 +87,78 @@ As annotations são listadas abaixo:
 * As linhas devem ter no máximo 80 caracteres.
 * Deixar uma linha em branco acima da declaração do método; 
 
-### 5.1 Quebra de linha
+###5.1 - Quebra de linha
 
 Quando a expressão não couber em uma linha, quebre-a com os seguintes princípios:
 
-* Quebrar depois da vírgula
-* Quebrar antes do operador
-* Alinhar nova linha no mesmo nível do início da expressão da linha anterior.
-* Não usar `;` para indicar fim de instrução e linha. 
+* Quebrar depois da vírgula, depois da abertura do parênteses e chaves.
+* No caso de mensagem para objetos o `.` deverá seguir o padrão seguinte:
 
-## 6 Sintaxe
+``` ruby
+# bad - need to consult first line to understand second line
+one.two.three.
+  four
+
+# good - it's immediately clear what's going on the second line
+one.two.three
+  .four 
+```
+Exemplo real:
+
+```
+# good 
+ruby
+quantity = Medic.all.where(speciality: speciality,             
+                           work_unit_id: id_work_unit)
+                           .size
+
+```
+
+* Quebrar antes do operador
+* Alinhar nova linha no mesmo nível do início da expressão da linha anterior, se couber.
+``` 
+# good 
+ruby
+
+  params_medic_record = { :name => row[3], 
+                        :average => 0,
+                        :registry => row[2],
+                        :speciality => row[4],
+                        :department => row[1]
+                        } 
+
+```
+* Métodos com argumentos muito grandes ou com muitos argumentos podem ser armazenados em uma variavel apenas se o alinhamento em mais de uma linha não couber e ficar desorganizado.
+
+``` ruby
+
+# params_medic_record é muito grande pra ser usado como argumento do metodo                                         #work_unit_record.medics.find_or_create_by
+  params_medic_record = { 
+        :name => row[3], 
+        :average => 0,
+        :registry => row[2],
+        :speciality => row[4],
+        :department => row[1] 
+  } 
+        
+        # Como as hashs ficariam desorganizadas pela limitação do espaço aqui, ficou melhor
+        # armazenar em uma variavel hash. Observe que o parenteses está alinhado com o nome 
+        # do método.
+  medic_record = work_unit_record.medics.find_or_create_by(params_medic_record
+                                                          ) # Alinahdo com o argumento
+
+```
+* Não usar `;` para indicar fim de instrução e linha, ruby não é C. 
+
+## 6 - Sintaxe
 * Declare uma classe sempre usando a primeira letra maiuscula;
 * Declare uma classe com nome composto, usando sempre a primeira letra de cada palavra em maiúsculo;
 * Não usar as palavras-chave and e or. Sempre usar && e ||. Também não utilizar `not`, ao invés disso utilizar `!` 
 * Não usar parênteses em ```if/unless/while```
 * Inicialize o construtor com ```def initialize ()```.
  
-## 7 Declarações
-### 7.1 Declaração de método
+##7 - Declarações
+###7.1 - Declaração de método
 
 * Usar ```def``` com parênteses apenas quando ele tiver argumentos. Deve-se omitir os parênteses quando o método não aceita nenhum argumento.
 
@@ -125,7 +187,7 @@ class TestClass
     # body omitted
   end
 ```
-### 7.2 Declaração `case`
+###7.2 - Declaração `case`
 
 O `when` deve estar indentado no mesmo nível do `case`:
 
@@ -137,7 +199,7 @@ O `when` deve estar indentado no mesmo nível do `case`:
   end …
 ```
 
-### 7.3 Declaração `for`
+###7.3 - Declaração `for`
 
 Deve seguir o seguinte padrão:
 
@@ -146,7 +208,7 @@ for current_iteration_number in 1..100 do
     # body omitted
 end
 ```
-* Apesar do padrão acima, deve-se evitar o uso do `for`, a não ser em casos que seja extremamente necessário.
+* Apesar do padrão acima, deve-se evitar o uso do `for`, a não ser em casos que seja extremamente necessário
 
 ```ruby
 arr = [1, 2, 3]
@@ -189,7 +251,7 @@ end.map { |name| name.upcase }
 names.select { |name| name.start_with?('S') }.map { |name| name.upcase }
 
 ```
-### 7.4 Declaração `if-else, if-elsif-else e unless`
+###7.4 - Declaração `if-else, if-elsif-else e unless`
 ``` ruby
   if some_condition
     # body omitted
@@ -230,7 +292,7 @@ end
   do_something if some_condition
 ```
 
-## 8 Nomenclatura
+##8 - Nomenclatura
 
 * Use ``` modo_correto ``` conhedido como `snake_case` para métodos e variáveis.
 * Use ``` ModoCorreto ``` conhecido como `CamelCase` para classes e módulos.
@@ -238,8 +300,15 @@ end
 * Métodos que retornam um valor booleano devem terminar com interrogação `?`
 *Métodos com algum risco devem terminar com exclamação `!`
 
-## 9 Outras expressões
+##9 - Outras expressões
 
+* Prefira ```%w``` para a sintaxe de um array literal quando precisar de array de strings.
+
+``` ruby
+  STATES = %w (draft, open, closed)
+```
+
+* Use símbolos ao invés de strings
 ### 9.1 Strings
 * Prefira ```%w``` para a sintaxe de um array literal quando precisar de array de strings.
 
@@ -283,9 +352,6 @@ number = 1000000
 # bom
 number = 1_000_000
 ```
-
 Referências: 
 * [Ruby Style Sheet](https://github.com/bbatsov/ruby-style-guide) 
 * [Ruby Style Sheet Guide Git](https://github.com/styleguide/ruby)
-
-

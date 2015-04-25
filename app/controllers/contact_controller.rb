@@ -1,4 +1,8 @@
-# Contact class between the user and administrators
+# File: contact_controller.rb
+# Purpose of class: Contact class between the user and administrators
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class ContactController < ApplicationController
 
 	def new

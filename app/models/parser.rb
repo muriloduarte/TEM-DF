@@ -4,8 +4,15 @@ require "date"
 require "schedule"
 require "work_unit"
 
+# REVIEW: Maybe would be better if the method save_data stay on medic.rb.
+# File: parser.rb
+# Purpose of class: This class is a model and contains attributes,            # associations and business methods for Medic entity.
+# This software follows GPL license.
+# TEM-DF Group
+# FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class Parser < ActiveRecord::Base
 
+	# Method to fill database
 	# file = '/public/csv/schedules.csv'
 	# columns from csv file:
 	# 0 - Nome da Unidade
