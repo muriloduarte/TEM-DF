@@ -22,9 +22,10 @@ class User < ActiveRecord::Base
 
 	# Method to autenticate user with password
 	def self.authenticate(username, password)
-		user = find_by_username_and_account_status(username,true)
-		if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
-			user
+		@user = find_by_username_and_account_status(username,true)
+		@encrypt = BCrypt::Engine.hash_secret(password, @user.password_salt)
+		if @user && @user.password_hash == @encrypt
+			@user
 		else
 			nil
 		end
