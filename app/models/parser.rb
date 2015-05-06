@@ -11,7 +11,6 @@ require "work_unit"
 # TEM-DF Group
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class Parser < ActiveRecord::Base
-
 	# Method to fill database
 	# file = '/public/csv/schedules.csv'
 	# columns from csv file:
@@ -24,6 +23,7 @@ class Parser < ActiveRecord::Base
 	# 6 - Data de fim
 	# 7 - Horário de entrada
 	# 8 - Horário de saída
+	
 	def self.save_data(file)
 		CSV.foreach(file, :col_sep => ";", :headers => true ) do |row|
 			start_date = DateTime.parse(row[5] + " " + row[7])

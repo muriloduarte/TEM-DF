@@ -10,17 +10,17 @@ class MedicsController < ApplicationController
 
 	# Method to collect medics
 	def results
-
 		# Instance variable for medics object indetifies by params of search fields
-		@medics = Medic.search(params[:list_specility], params[:list_work_unit_name																										 ])
+		@medics = Medic.search(params[:list_specility], 
+													 params[:list_work_unit_name])
 
 		# Conditional for to return the medic object if the fields are filled     # correctly, else, show alert menssage and go to home. 
 		if @medics
-  			@medics
-  		else
-  			flash.now.alert="Escolha um campo."
-  			render "home/index"
-  		end
+  		@medics
+  	else
+  		flash.now.alert="Escolha um campo."
+  		render "home/index"
+  	end
 	end
 
 	# Method to collect a medic's information
@@ -119,8 +119,12 @@ class MedicsController < ApplicationController
 		@user = User.find_by_id(session[:remember_token])
 		@medic = Medic.find_by_id(params[:medic_id])
 		if @user
-			@comment = Comment.new(content: params[:content], date: Time.current,
-				medic: @medic, user: @user, comment_status: true, report: false)
+			@comment = Comment.new(content: params[:content], 
+														 date: Time.current,
+														 medic: @medic, 
+														 user: @user, 
+														 comment_status: true, 
+											       report: false)
 			@comment.save
 			redirect_to profile_path(@medic)
 		else
@@ -148,7 +152,9 @@ class MedicsController < ApplicationController
 				if @relevance
 					@relevance.update_attribute(:value, params[:value])
 				else
-					@relevance = Relevance.create(value: params[:value], user: @user, comment: @comment)
+					@relevance = Relevance.create(value: params[:value], 
+																				user: @user, 
+																				comment: @comment)
 				end
 
 			# Redirect profile.	
@@ -179,7 +185,10 @@ class MedicsController < ApplicationController
   private 
   # Method to create rating of a medic
 	def create_rating(user, medic)
-		@rating = Rating.new(grade: params[:grade], user: user, medic: medic, date: Time.current)
+		@rating = Rating.new(grade: params[:grade], 
+												 user: user, 
+												 medic: medic, 
+												 date: Time.current)
 		@rating.save
 	end
 
