@@ -4,7 +4,6 @@
 # TEM-DF Group
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class Relevance < ActiveRecord::Base
-	
 	belongs_to :user
 	belongs_to :comment
 end

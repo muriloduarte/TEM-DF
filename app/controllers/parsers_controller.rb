@@ -15,7 +15,9 @@ class ParsersController < ApplicationController
 		document = params[:document]
 		# Checks for document and starts the parser
 		if document
-			File.open(Rails.root.join('public', 'csv', 'schedules.csv'), 'wb') {     |file| file.write(document.read)
+			file_path = Rails.root.join('public', 'csv', 'schedules.csv')
+			File.open(file_path , 'wb') {     
+				|file| file.write(document.read)
 			}
 			Parser.save_data('public/csv/schedules.csv')
 			redirect_to root_path

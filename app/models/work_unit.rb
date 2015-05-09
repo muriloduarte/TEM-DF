@@ -4,6 +4,5 @@
 # TEM-DF Group
 # FGA-UnB Faculdade de Engenharias do Gama - Universidade de Brasília
 class WorkUnit < ActiveRecord::Base
-
 	has_many :medics
 end

@@ -15,6 +15,6 @@ class ContactController < ApplicationController
 		                      				params[:email], 
 		                      				params[:name])
 		email.deliver
-		redirect_to root_path
+		redirect_to root_path, :notice => "Enviado com sucesso!"
   end
 end
