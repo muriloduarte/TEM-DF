@@ -93,14 +93,21 @@ class MedicsController < ApplicationController
 		@medics_size_speciality
 	end
 	
+	not_exists_user = @user == nil
+	exists_user = @user
+
 	# Method to rating a medic
 	def rating
 		medic_id = params[:medic_id]
 		@user = User.find_by_id(session[:remember_token])
 		@medic = Medic.find_by_id(medic_id)
-		if @user != nil
+
+		if not_exists_user
 			rating_status = ""
 			@rating = Rating.find_by_user_id_and_medic_id(@user.id, @medic.id)
+
+			# REVIEW: Verify this condidional with average action. Apply the default 
+			# 	behavior. 
 			if @rating != nil
 				update_rating(@rating , params[:grade])
 				rating_status = 'Avaliação Alterada!'
@@ -118,7 +125,7 @@ class MedicsController < ApplicationController
 	def create_comment
 		@user = User.find_by_id(session[:remember_token])
 		@medic = Medic.find_by_id(params[:medic_id])
-		if @user
+		if exists_user
 			@comment = Comment.new(content: params[:content], 
 														 date: Time.current,
 														 medic: @medic, 
@@ -141,15 +148,20 @@ class MedicsController < ApplicationController
 		# Comment by id passed by params.
 		@comment = Comment.find_by_id(params[:comment_id])
 
+		# Constants used on next conditional, this constants facilitates the
+		# read code.
+		exist_comment = @comment
+		exist_relevance = @relevance
+
 		# Conditional which verify case anybody user is logged, then redirect to  # login and show a alert. 
 		# Else have an user and comment, then get some relevance.
 		# Case have a relevance, then the relevance will be update with the values
 		# setted by user, else, will be created.
-		if @user == nil
+		if not_exists_user
 			redirect_to login_path, :alert => "O Usuário necessita estar logado"
-		elsif @comment
+		elsif exist_comment
 				@relevance = Relevance.find_by_user_id_and_comment_id(@user.id, @comment.id)
-				if @relevance
+				if exist_relevance
 					@relevance.update_attribute(:value, params[:value])
 				else
 					@relevance = Relevance.create(value: params[:value], 
@@ -192,11 +204,12 @@ class MedicsController < ApplicationController
 		@rating.save
 	end
 
-	NOT_EXIST_GRADE = "0"
+	NIL_GRADE = "0"
 
 	# Method to change an existing rating
-	def update_rating(rating,grade)
-		if grade != NOT_EXIST_GRADE
+	def update_rating(rating, grade)
+		not_exist_grade = grade != NIL_GRADE
+		if not_exist_grade
 			rating.update_attribute(:grade , grade)
       rating.update_attribute(:date , Time.current)
     else
@@ -204,13 +217,17 @@ class MedicsController < ApplicationController
     end
 	end
 
-	NOT_EXIST_RATING = 0
+	NIL_RATING = 0
 
 	# Method to caculate average of all rating of a medic
 	def calculate_average(medic)
 		@ratings = Rating.all.where(medic_id: medic.id)
-		if @ratings.size == NOT_EXIST_RATING
-			NOT_EXIST_RATING
+		
+		# REVIEW: Verify the default behavior with the rating action.
+		not_exist_rating = @ratings.size == NIL_RATING
+
+		if not_exist_rating
+			NIL_RATING
 		else
   		sum_of_grades_rating = 0
 			@ratings.each { |rating| sum_of_grades_rating += rating.grade}

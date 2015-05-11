@@ -12,6 +12,9 @@ class PasswordResetsController < ApplicationController
 	# Method for reset the password by email 
 	def create
 		@user = User.find_by_email_and_username(params[:email],params[:username])
+		
+		# Condition wich verify the user and send a email for reset his password.
+		# If user exists, email will send, else, show alert.
 		if @user
 			@user.send_password_reset 
 			redirect_to root_path, :notice => "Um e-mail foi enviado com as instruções para #{:email}."
@@ -34,6 +37,8 @@ class PasswordResetsController < ApplicationController
 
 	# Method to change password
 	def update
+
+		#
 		@user = User.find_by_password_reset_token!(params[:id])
 		if @user.password_reset_sent_at < 2.hours.ago
 			redirect_to new_password_reset_path, :alert => "O link de redefinição de senha expirou."
