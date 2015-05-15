@@ -1,17 +1,16 @@
 <br>
 <div class="row">
-    <div class="col-lg-5 col-md-offset-2">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-            	Envie o arquivo csv
-            </div>
-            <div class="panel-body">
+   <div class="col-lg-5 col-md-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Envie o arquivo ".csv"
+        </div>
+      <div class="panel-body">
 				<%= form_tag 'upload', multipart: true do  %>
-					<div class="form-group"> 
-				    <%= file_field_tag 'document', accept: '.csv'%>
-				  </div>
-				  <%= submit_tag 'Enviar' , class: 'btn btn-lg btn-success btn-block' %>
-
+						<div class="form-group"> 
+					    <%= file_field_tag 'document', accept: '.csv'%>
+					  </div>
+				  	<%= submit_tag 'Enviar' , class: 'btn btn-lg btn-success btn-block' %>
 				<% end %>
 			</div>
 		</div>
