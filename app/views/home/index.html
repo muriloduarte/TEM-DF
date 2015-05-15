@@ -1,4 +1,5 @@
 <br>
+	<!-- REVIEW: This conditional violates the architecture? -->
 	<% if current_user && current_user.username == "admin"%>
 		   <div class="col-lg-4 col-md-6">
 		       <div class="panel panel-red">
@@ -8,6 +9,7 @@
 		                        <i class="fa fa-exclamation fa-5x"></i>
 		                    </div>
 		                    <div class="col-xs-9 text-right">
+		                    	<!--REVIEW: this violates the architecture?-->
 		                        <div class="huge"><%= Comment.all.where(report: true).size %></div>
 		                        <div>Denúncias</div>
 		                    </div>
@@ -31,6 +33,7 @@
 		                        <i class="fa fa-ban fa-5x"></i>
 		                    </div>
 		                    <div class="col-xs-9 text-right">
+		                    	<!--REVIEW: this violates the architecture?-->
 		                        <div class="huge"><%= User.all.where(account_status: false).size %></div>
 		                        <div>Usuarios Desativados</div>
 		                    </div>
@@ -54,6 +57,7 @@
 	                        <i class="fa fa-users fa-5x"></i>
 	                    </div>
 	                    <div class="col-xs-9 text-right">
+	                    	<!--REVIEW: this violates the architecture?-->
 	                        <div class="huge"><%= User.all.where(account_status: true).size %></div>
 	                        <div>Usuarios Ativados</div>
 	                    </div>
