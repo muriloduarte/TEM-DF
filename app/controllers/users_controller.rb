@@ -24,6 +24,7 @@ class UsersController < ApplicationController
     if @user.account_status == false && !@document
       flash.now.alert = "Você precisa anexar um documento!"
       render "new"
+      CUSTOM_LOGGER.info("Failure to create user #{@user.to_yaml}")
     # Check whether the password and password_confirmation are the same
     elsif @user.password == @user.password_confirmation 
       @user.account_status = false
@@ -45,9 +46,11 @@ class UsersController < ApplicationController
         redirect_to root_path
       else
         render "new"
+        CUSTOM_LOGGER.info("Failure to create user #{@user.to_yaml}")
       end
     else
       render "new"
+      CUSTOM_LOGGER.info("Failure to create user #{@user.to_yaml}")
     end
   end
 
