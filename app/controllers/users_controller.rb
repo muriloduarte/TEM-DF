@@ -30,6 +30,7 @@ class UsersController < ApplicationController
       @user.account_status = false
       if @user.save
         upload @document
+        CUSTOM_LOGGER.info("User saved and document uploaded #{@user.to_yaml}")
         # Check whether the user is common 
         if @user_params_document == nil
           # Generate a random number for use it in update password
@@ -38,10 +39,12 @@ class UsersController < ApplicationController
           @user.update_attribute(:medic_type_status, false)
           TemdfMailer.confimation_email(@user.id, @user.token_email, @user.email).deliver
           flash[:notice] = "Por favor confirme seu cadastro pela mensagem enviada ao seu email!"
+          CUSTOM_LOGGER.info("User saved #{@user.to_yaml} but not confirmed")
         # Or a medic user
         else
           @user.update_attribute(:medic_type_status, true)
           flash[:notice] = "Nossa equipe vai avaliar seu cadastro. Por favor aguarde a nossa aprovação para acessar sua conta!"
+          CUSTOM_LOGGER.info("User saved #{@user.to_yaml} but not confirmed")
         end
         redirect_to root_path
       else
@@ -57,16 +60,19 @@ class UsersController < ApplicationController
   # Auxiliar method to create a user
   def new
     @user = User.new
+    CUSTOM_LOGGER.info("Start to create user #{@user.to_yaml}")
   end
 
   # Method to find a user by id and assist to update user's information
   def edit
     @user = User.find_by_id(session[:remember_token])
+    CUSTOM_LOGGER.info("Start to edit user #{@user.to_yaml}")
   end
 
   # Method to find a user by id and assist to update user's password
   def edit_password
     @user = User.find_by_id(session[:remember_token]) 
+    CUSTOM_LOGGER.info("Start to edit password #{@user.to_yaml}")
   end
 
   # Method to update user's information
@@ -80,9 +86,11 @@ class UsersController < ApplicationController
         if @user_from_email && @user != @user_from_email
           flash[:alert] = "Email já existente"
           render "edit" 
+          CUSTOM_LOGGER.info("Failure to update user #{@user.to_yaml}")
         else 
           @user.update_attribute(:email , @email)
           redirect_to root_path, notice: 'Usuário alterado!'
+          CUSTOM_LOGGER.info("Update user attributes #{@user.to_yaml}")
         end
       # Commom user's update 
       else 
@@ -94,19 +102,23 @@ class UsersController < ApplicationController
         if @user_from_username && @user != @user_from_username
           flash[:alert] = "Nome já existente"
           render "edit"
+          CUSTOM_LOGGER.info("Failure to update user #{@user.to_yaml}")
         # Check if the email is in use
         elsif @user_from_email && @user != @user_from_email
           flash[:alert] = "Email já existente"
           render "edit" 
+          CUSTOM_LOGGER.info("Failure to update user #{@user.to_yaml}")
         # If not update attributes
         else 
           @user.update_attribute(:username , @username)
           @user.update_attribute(:email , @email)
           redirect_to root_path, notice: "Usuário alterado!"
+          CUSTOM_LOGGER.info("Update user attributes #{@user.to_yaml}")
         end
       end
     else
       redirect_to root_path
+      CUSTOM_LOGGER.info("Failure to update user #{@user.to_yaml}")
     end
   end
 
@@ -124,14 +136,18 @@ class UsersController < ApplicationController
         	if @password_confirmation == @new_password && !@new_password.blank?
           	@user.update_attribute(:password, @new_password)
           	redirect_to root_path, notice: "Alteração feita com sucesso"
+          	CUSTOM_LOGGER.info("Update user password #{@user.to_yaml}")
         	else
           	redirect_to edit_password_path, alert: "Confirmação nao confere ou campo vazio"
+          	CUSTOM_LOGGER.info("Failure to update password #{@user.to_yaml}")
         	end
         else
         	redirect_to edit_password_path, alert: "Senha errada"
+        	CUSTOM_LOGGER.info("Failure to update password #{@user.to_yaml}")
         end
     else
       redirect_to edit_password_path
+      CUSTOM_LOGGER.info("Failure to update password #{@user.to_yaml}")
     end
   end
 
@@ -140,16 +156,19 @@ class UsersController < ApplicationController
     @user = User.find_by_id(session[:remember_token])
     # Admin's deactivate
     if @user && @user.username != "admin"
-        @user.update_attribute(:account_status, false)
-        redirect_to logout_path
+      @user.update_attribute(:account_status, false)
+      redirect_to logout_path
+      CUSTOM_LOGGER.info("User deactivated #{@user.to_yaml}")
     # User's deactivate
     else
       @user = User.find_by_id(params[:id])
       if @user
         @user.update_attribute(:account_status, false)
         redirect_to(action: "index")
+        CUSTOM_LOGGER.info("User deactivated #{@user.to_yaml}")
       else
         redirect_to root_path
+        CUSTOM_LOGGER.info("Failure to deactivate user #{@user.to_yaml}")
       end
     end
   end
@@ -160,8 +179,10 @@ class UsersController < ApplicationController
     if @user
       @user.update_attribute(:account_status, true)
       redirect_to(action: "index")
+      CUSTOM_LOGGER.info("User reactivated #{@user.to_yaml}")
     else
       redirect_to root_path
+      CUSTOM_LOGGER.info("Failure to reactivate user #{@user.to_yaml}")
     end
   end
 
@@ -174,8 +195,10 @@ class UsersController < ApplicationController
       @user.update_attribute(:account_status, true)
       @user.update_attribute(:token_email, nil)
       @message = "Cadastro Confirmado!"
+      CUSTOM_LOGGER.info("User confirmed #{@user.to_yaml}")
     else
       @message = "Link inválido!"
+      CUSTOM_LOGGER.info("Failure to confirm user #{@user.to_yaml}, invalid link")
     end
     redirect_to root_path, notice: @message
   end
@@ -192,6 +215,7 @@ class UsersController < ApplicationController
           File.open(Rails.root.join('public', 'uploads', 'arquivo_medico'), 'wb') { |file| file.write(uploaded_io.read) }
           # Send file to temdf email
           TemdfMailer.request_account.deliver
+          CUSTOM_LOGGER.info("Send email to #{@user.to_yaml}")
         else 
           # Nothing to do
         end
