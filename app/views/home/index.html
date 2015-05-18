@@ -1,75 +1,73 @@
 <br>
 	<!-- REVIEW: This conditional violates the architecture? -->
-	<% if current_user && current_user.username == "admin"%>
-		   <div class="col-lg-4 col-md-6">
-		       <div class="panel panel-red">
-		           <div class="panel-heading">
-		               <div class="row">
-		                    <div class="col-xs-3">
-		                        <i class="fa fa-exclamation fa-5x"></i>
-		                    </div>
-		                    <div class="col-xs-9 text-right">
-		                        <div class="huge"><%= @reported_comment_size %></div>
-		                        <div>Denúncias</div>
-		                    </div>
-		                </div>
-		            </div>
-		            <%= link_to reported_comments_path, id: "DenunciasDetalhes" do %>
-		                <div class="panel-footer">
-		                    <span class="pull-left">Ver detalhes</span>
-		                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-		                    <div class="clearfix"></div>
-		                </div>
-		            <% end %>
-		        </div>
-		    </div>
-
-		    <div class="col-lg-4 col-md-6">
-		       <div class="panel panel-yellow">
-		           <div class="panel-heading">
-		               <div class="row">
-		                    <div class="col-xs-3">
-		                        <i class="fa fa-ban fa-5x"></i>
-		                    </div>
-		                    <div class="col-xs-9 text-right">
-		                        <div class="huge"><%= @deactivated_user_size %></div>
-		                        <div>Usuarios Desativados</div>
-		                    </div>
-		                </div>
-		            </div>
-		            <%= link_to users_path, id: "DesativadosDetalhes" do %>
-		                <div class="panel-footer">
-		                    <span class="pull-left">Ver detalhes</span>
-		                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-		                    <div class="clearfix"></div>
-		                </div>
-		            <% end %>
-		        </div>
-		    </div>
-
-	    <div class="col-lg-4 col-md-6">
-	       <div class="panel panel-primary">
-	           <div class="panel-heading">
-	               <div class="row">
-	                    <div class="col-xs-3">
-	                        <i class="fa fa-users fa-5x"></i>
-	                    </div>
-	                    <div class="col-xs-9 text-right">
-	                        <div class="huge"><%= @activaded_user_size %></div>
-	                        <div>Usuarios Ativados</div>
-	                    </div>
-	                </div>
-	            </div>
-	            <%= link_to users_path, id: "AtivadosDetalhes" do %>
-	                <div class="panel-footer">
-	                    <span class="pull-left">Ver detalhes</span>
-	                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-	                    <div class="clearfix"></div>
-	                </div>
-	            <% end %>
-	        </div>
-	    </div>
-	<% else %>
+<% if current_user && current_user.username == "admin"%>
+    <div class="col-lg-4 col-md-6">
+      <div class="panel panel-red">
+	      <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-3">
+              <i class="fa fa-exclamation fa-5x"></i>
+            </div>
+            <div class="col-xs-9 text-right">
+              <div class="huge"><%= @reported_comment_size %></div>
+              <div>Denúncias</div>
+            </div>
+          </div>
+	      </div>
+	      <%= link_to reported_comments_path, id: "DenunciasDetalhes" do %>
+          <div class="panel-footer">
+            <span class="pull-left">Ver detalhes</span>
+            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+            <div class="clearfix"></div>
+          </div>
+        <% end %>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6">
+    <div class="panel panel-yellow">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-ban fa-5x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <div class="huge"><%= @deactivated_user_size %></div>
+            <div>Usuarios Desativados</div>
+          </div>
+          </div>
+      </div>
+      <%= link_to users_path, id: "DesativadosDetalhes" do %>
+        <div class="panel-footer">
+          <span class="pull-left">Ver detalhes</span>
+          <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6">
+   <div class="panel panel-primary">
+     <div class="panel-heading">
+       <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-users fa-5x"></i>
+          </div>
+	        <div class="col-xs-9 text-right">
+            <div class="huge"><%= @activaded_user_size %></div>
+            <div>Usuarios Ativados</div>
+          </div>
+        </div>
+      </div>
+      <%= link_to users_path, id: "AtivadosDetalhes" do %>
+        <div class="panel-footer">
+          <span class="pull-left">Ver detalhes</span>
+          <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+          <div class="clearfix"></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% else %>
   <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
