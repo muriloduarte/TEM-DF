@@ -7,10 +7,10 @@
         </div>
       <div class="panel-body">
 				<%= form_tag 'upload', multipart: true do  %>
-						<div class="form-group"> 
-					    <%= file_field_tag 'document', accept: '.csv'%>
-					  </div>
-				  	<%= submit_tag 'Enviar' , class: 'btn btn-lg btn-success btn-block' %>
+					<div class="form-group"> 
+						<%= file_field_tag 'document', accept: '.csv'%>
+					</div>
+					<%= submit_tag 'Enviar' , class: 'btn btn-lg btn-success btn-block' %>
 				<% end %>
 			</div>
 		</div>

@@ -10,7 +10,7 @@ class CommentsController < ApplicationController
 		@user = User.find_by_id(session[:remember_token])
 
 		#checks if the User is admin
-    if @user && @user.username == "admin"
+		if @user && @user.username == "admin"
 			@reported_comments = Comment.all.where(report: true)
 		else
 			redirect_to root_path
@@ -24,7 +24,7 @@ class CommentsController < ApplicationController
 		if @comment
 			@comment.update_attribute(:comment_status, false)
 		else
-			# Nothing to do
+			missing_report
 		end
 		redirect_to reported_comments_path
 	end
@@ -36,7 +36,7 @@ class CommentsController < ApplicationController
 		if @comment
 			@comment.update_attribute(:comment_status, true)
 		else
-			# Nothing to do
+			missing_report
 		end
 		redirect_to reported_comments_path
 	end
@@ -48,8 +48,14 @@ class CommentsController < ApplicationController
 		if @comment
 			@comment.update_attribute(:report, false)
 		else
-			# Nothing to do
+			missing_report
 		end
+		redirect_to reported_comments_path
+	end
+
+	#REVIEW: it would be better to use assert?
+	def missing_report
+		flash.now.alert = "Erro, comentario n encontrado."
 		redirect_to reported_comments_path
 	end
 end
