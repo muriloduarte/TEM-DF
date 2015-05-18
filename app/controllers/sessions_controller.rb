@@ -12,9 +12,9 @@ class SessionsController < ApplicationController
   # Create sessions when users perform login 
   def create
     user = User.authenticate(params[:username], params[:password])
-    user_id = user.id
     # Check the User existence and if your account is active
     if user && user.account_status == true
+      user_id = user.id
       session[:remember_token] = user_id
       session[:user_id] = user_id
       redirect_to root_path, :notice => "Seja bem vindo!"
