@@ -11,8 +11,10 @@ class UsersController < ApplicationController
     @user = User.find_by_id(session[:remember_token])
     if @user && @user.username == "admin" 
       @users = User.all
+      CUSTOM_LOGGER.info("Showed all users")
     else
       redirect_to root_path
+      CUSTOM_LOGGER.info("Failure to showed all users")
     end
   end
 
