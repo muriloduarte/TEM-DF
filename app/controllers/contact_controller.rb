@@ -6,7 +6,6 @@
 class ContactController < ApplicationController
 
 	def new
-		# Nothing to do!
 		CUSTOM_LOGGER.info("Created new contact")
   end
 
