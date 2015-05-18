@@ -108,7 +108,7 @@ class MedicsController < ApplicationController
 
 			# REVIEW: Verify this condidional with average action. Apply the default 
 			# 	behavior. 
-			if @rating != nil
+			if @rating
 				update_rating(@rating , params[:grade])
 				rating_status = 'Avaliação Alterada!'
 			else
@@ -157,9 +157,8 @@ class MedicsController < ApplicationController
 		# Else have an user and comment, then get some relevance.
 		# Case have a relevance, then the relevance will be update with the values
 		# setted by user, else, will be created.
-		if not_exists_user
-			redirect_to login_path, :alert => "O Usuário necessita estar logado"
-		elsif exist_comment
+		
+		if exist_comment && !not_exists_user
 				@relevance = Relevance.find_by_user_id_and_comment_id(@user.id, @comment.id)
 				if exist_relevance
 					@relevance.update_attribute(:value, params[:value])
@@ -171,7 +170,12 @@ class MedicsController < ApplicationController
 
 			# Redirect profile.	
 			redirect_to action:"profile",id: params[:medic_id]
-			end
+		end
+		if not_exists_user
+			redirect_to login_path, :alert => "O Usuário necessita estar logado"
+		else
+			# Nothing to do
+		end
 	end
 
 	# Methos to report a undue comment
@@ -209,11 +213,11 @@ class MedicsController < ApplicationController
 	# Method to change an existing rating
 	def update_rating(rating, grade)
 		not_exist_grade = grade != NIL_GRADE
-		if not_exist_grade
-			rating.update_attribute(:grade , grade)
-      rating.update_attribute(:date , Time.current)
+		if !not_exist_grade
+			# Nothing to do
     else
-    	# Nothing to do  
+    	rating.update_attribute(:grade , grade)
+      rating.update_attribute(:date , Time.current)  
     end
 	end
 
@@ -226,14 +230,13 @@ class MedicsController < ApplicationController
 		# REVIEW: Verify the default behavior with the rating action.
 		not_exist_rating = @ratings.size == NIL_RATING
 
-		if not_exist_rating
-			NIL_RATING
-		else
-  		sum_of_grades_rating = 0
+		if !not_exist_rating
 			@ratings.each { |rating| sum_of_grades_rating += rating.grade}
 			arithmetic_mean_averange = sum_of_grades_rating / (1.0 * @ratings.size)
 			medic.update_attributes(:average => arithmetic_mean_averang)
 			arithmetic_mean_averange
+		else
+  		NIL_RATING
 		end
 	end
 end

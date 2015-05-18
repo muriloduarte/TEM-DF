@@ -51,6 +51,8 @@ end
 gem 'capybara'
 gem 'selenium-webdriver'
 
+gem 'log4r', '<=1.1.10'
+
 # Use unicorn as the app server
 # gem 'unicorn'
 
