@@ -12,8 +12,10 @@ class CommentsController < ApplicationController
 		#checks if the User is admin
 		if @user && @user.username == "admin"
 			@reported_comments = Comment.all.where(report: true)
+			CUSTOM_LOGGER.info("Showed all users")
 		else
 			redirect_to root_path
+			CUSTOM_LOGGER.info("Failure to showed all users")
 		end
 	end
 
@@ -23,7 +25,9 @@ class CommentsController < ApplicationController
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment
 			@comment.update_attribute(:comment_status, false)
+			CUSTOM_LOGGER.info("Comment deactivated #{@comment.to_yaml}")
 		else
+			CUSTOM_LOGGER.info("Failure to deactivate comment #{@comment.to_yaml}")
 			missing_report
 		end
 		redirect_to reported_comments_path
@@ -35,7 +39,9 @@ class CommentsController < ApplicationController
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment
 			@comment.update_attribute(:comment_status, true)
+			CUSTOM_LOGGER.info("Comment reactivated #{@comment.to_yaml}")
 		else
+			CUSTOM_LOGGER.info("Failure to reactivate comment #{@comment.to_yaml}")
 			missing_report
 		end
 		redirect_to reported_comments_path
@@ -47,7 +53,9 @@ class CommentsController < ApplicationController
 		@comment = Comment.find_by_id(params[:comment_id])
 		if @comment
 			@comment.update_attribute(:report, false)
+			CUSTOM_LOGGER.info("Comment report disabled #{@comment.to_yaml}")
 		else
+			CUSTOM_LOGGER.info("Failure to disable report #{@comment.to_yaml}")
 			missing_report
 		end
 		redirect_to reported_comments_path
@@ -55,7 +63,7 @@ class CommentsController < ApplicationController
 
 	#REVIEW: it would be better to use assert?
 	def missing_report
-		flash.now.alert = "Erro, comentario n encontrado."
+		flash.now.alert = "Erro, comentario nao encontrado."
 		redirect_to reported_comments_path
 	end
 end
