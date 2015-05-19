@@ -7,6 +7,7 @@
 class SessionsController < ApplicationController
 
   def new
+    CUSTOM_LOGGER.info("Created new session")
   end
 
   # Create sessions when users perform login 
@@ -18,9 +19,11 @@ class SessionsController < ApplicationController
       session[:remember_token] = user_id
       session[:user_id] = user_id
       redirect_to root_path, :notice => "Seja bem vindo!"
+      CUSTOM_LOGGER.info("Created session user #{user.to_yaml}")
     else
       flash.now.alert = "Usuário ou senha inválidos!"
       render "new"
+      CUSTOM_LOGGER.error("Failure to created session user")
     end
   end
 
@@ -29,5 +32,6 @@ class SessionsController < ApplicationController
     session[:remember_token] = nil
     session[:user_id] = nil
     redirect_to root_path, :notice => "Obrigado, volte sempre!"
+    CUSTOM_LOGGER.info("Destroy user sessions")
   end
 end

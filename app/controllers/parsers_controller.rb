@@ -8,6 +8,7 @@ class ParsersController < ApplicationController
 	# Reload the page index
 	def index
 		render "index"
+		CUSTOM_LOGGER.info("Reload index")
 	end
 
 	# Upload schedule.csv file in the database
@@ -21,8 +22,10 @@ class ParsersController < ApplicationController
 			}
 			Parser.save_data('public/csv/schedules.csv')
 			redirect_to root_path
+			CUSTOM_LOGGER.info("Held the parser")
 		else
 			redirect_to 'http://0.0.0.0:3000/parsers'
+			CUSTOM_LOGGER.error("Failure to start the parser")
 		end
 	end
 end

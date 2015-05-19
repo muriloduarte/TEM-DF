@@ -6,6 +6,7 @@
 class ContactController < ApplicationController
 
 	def new
+		CUSTOM_LOGGER.info("Created new contact")
   end
 
   # Receive contact attributes of view, and send e-mail to administrators
@@ -16,5 +17,6 @@ class ContactController < ApplicationController
 		                      				params[:name])
 		email.deliver
 		redirect_to root_path, :notice => "Enviado com sucesso!"
+		CUSTOM_LOGGER.info("Made email contact from #{ params[:name]}/#{ params[:email]}")
   end
 end
