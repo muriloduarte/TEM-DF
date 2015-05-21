@@ -17,8 +17,10 @@ class MedicsController < ApplicationController
 		# Conditional for to return the medic object if the fields are filled     # correctly, else, show alert menssage and go to home. 
 		if @medics
   		@medics
+  		CUSTOM_LOGGER.info("success")
   	else
   		flash.now.alert="Escolha um campo."
+  		CUSTOM_LOGGER.error("empty field")
   		render "home/index"
   	end
 	end
@@ -102,22 +104,25 @@ class MedicsController < ApplicationController
 		@user = User.find_by_id(session[:remember_token])
 		@medic = Medic.find_by_id(medic_id)
 
-		if not_exists_user
+		if !not_exists_user
 			rating_status = ""
 			@rating = Rating.find_by_user_id_and_medic_id(@user.id, @medic.id)
-
+			CUSTOM_LOGGER.info("not exist user")
 			# REVIEW: Verify this condidional with average action. Apply the default 
 			# 	behavior. 
 			if @rating
 				update_rating(@rating , params[:grade])
 				rating_status = 'Avaliação Alterada!'
+				CUSTOM_LOGGER.info("Exist rating")
 			else
+				CUSTOM_LOGGER.info("not exist rating")
 				create_rating(@user, @medic)
 				rating_status = 'Avaliação Realizada com sucesso!'
 			end
 			redirect_to action:"profile",id: medic_id, notice: rating_status
 		else
 			redirect_to login_path, :alert => "O Usuário necessita estar logado"
+			CUSTOM_LOGGER.error("user not login")
 		end
 	end
 
@@ -134,8 +139,10 @@ class MedicsController < ApplicationController
 											       report: false)
 			@comment.save
 			redirect_to profile_path(@medic)
+			CUSTOM_LOGGER.info("exist user")
 		else
 			redirect_to login_path, :alert => "O Usuário necessita estar logado"
+			CUSTOM_LOGGER.error("user not login")
 		end
 	end
 
@@ -157,7 +164,6 @@ class MedicsController < ApplicationController
 		# Else have an user and comment, then get some relevance.
 		# Case have a relevance, then the relevance will be update with the values
 		# setted by user, else, will be created.
-		
 		if exist_comment && !not_exists_user
 				@relevance = Relevance.find_by_user_id_and_comment_id(@user.id, @comment.id)
 				if exist_relevance
@@ -187,6 +193,7 @@ class MedicsController < ApplicationController
 		# Conditional which verify if the comment is reported, case not, his
 		# attibute will be updated.
 		if @comment.report == false
+			CUSTOM_LOGGER.info("not exist report")
 			@comment.update_attribute(:report, true)
 		end
 		flash[:notice] = "Comentário reportado."
